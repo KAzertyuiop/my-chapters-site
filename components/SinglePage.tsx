@@ -1,23 +1,18 @@
 'use client'
 
+import MainStart from '@/components/MainStart'
 import { useEffect } from 'react'
+import { sections } from '@/lib/sections'
 
-const chapters = [
-  'chapter-1',
-  'chapter-2',
-  'chapter-3',
-  'chapter-4',
-  'chapter-5',
-  'chapter-6',
-]
+const sectionIds = sections.map(s => s.id)
 
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
-  // Scroll to chapter on direct navigation
+  // Scroll to section on direct navigation
   useEffect(() => {
-    if (scrollToId) {
-      const el = document.getElementById(scrollToId)
-      el?.scrollIntoView({ behavior: 'smooth' })
-    }
+    if (!scrollToId) return
+
+    const el = document.getElementById(scrollToId)
+    el?.scrollIntoView({ behavior: 'smooth' })
   }, [scrollToId])
 
   // URL update on scroll
@@ -25,16 +20,17 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id
+          if (!entry.isIntersecting) return
 
-            if (chapters.includes(id)) {
-              window.history.replaceState(null, '', `/${id}`)
-            }
+          const id = entry.target.id
 
-            if (id === 'intro') {
-              window.history.replaceState(null, '', '/')
-            }
+          if (id === 'intro') {
+            window.history.replaceState(null, '', '/')
+            return
+          }
+
+          if (sectionIds.includes(id)) {
+            window.history.replaceState(null, '', `/${id}`)
           }
         })
       },
@@ -44,27 +40,32 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     const intro = document.getElementById('intro')
     if (intro) observer.observe(intro)
 
-    chapters.forEach(id => {
+    sectionIds.forEach(id => {
       const el = document.getElementById(id)
       if (el) observer.observe(el)
     })
 
     return () => observer.disconnect()
-  }, [])
+  }, [sectionIds])
 
   return (
     <main>
-      {/* Intro / Homepage */}
-      <section id="intro" style={{ height: '100vh' }}>
-        <h1>Intro</h1>
+      <section id="intro">
+        <MainStart/>
       </section>
 
-      {/* Chapters */}
-      {chapters.map(id => (
-        <section key={id} id={id} style={{ height: '100vh' }}>
-          <h1>{id.replace('-', ' ')}</h1>
-        </section>
-      ))}
+      {sections
+        .slice()
+        .sort((a, b) => a.order - b.order)
+        .map(section => (
+          <section
+            key={section.id}
+            id={section.id}
+            style={{ height: '100vh' }}
+          >
+            <h1>{section.title.en}</h1>
+          </section>
+        ))}
     </main>
   )
 }
