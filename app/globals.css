@@ -1,26 +1,91 @@
-@import "tailwindcss";
+@import "tailwindcss"; /* harmless even if unused */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #ffffff;
+  --bg-alt: #e1e1e1;
+  --fg: #111111;
+  --muted: #666666;
+  --border: #e5e5e5;
+  --accent: #2563eb;
+  --color-x: #3f1d1d;
+  --color-y: #1e3a5f;
+  --color-z: #064e3b;
+
+  --max-width: 72rem;
+  --section-padding: 6rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: var(--section-padding) 0;
+}
+
+.section + .section {
+  border-top: 1px solid var(--border);
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+}
+
+.section p {
+  max-width: 42rem;
+  color: var(--muted);
+}
+
+#gebruik .highlight {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f5f7ff;
+  border-left: 4px solid var(--accent);
+  font-weight: 500;
+}
+
+
+#gebruik {
+  background: var(--bg, white);
+}
+#kar {
+  background: var(--bg-alt, white);
+}
+#koop {
+  background: var(--bg-alt, white);
+}
+#kraan {
+  background: var(--bg, white);
+}
+#opslag {
+  background: var(--bg-alt, white);
+}
+#over {
+  background: var(--bg-alt, white);
+}
+#overzicht {
+  background: var(--bg, white);
+}
+#transport {
+  background: var(--bg, white);
 }

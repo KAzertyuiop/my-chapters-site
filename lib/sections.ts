@@ -16,7 +16,7 @@ export type Locale = 'en' | 'nl'
 export type Section = {
   id: string
   order: number
-  component: ComponentType
+  Component: ComponentType
 
   title: Record<Locale, string>
   description: Record<Locale, string>
@@ -32,7 +32,7 @@ export const sections: Section[] = [
   {
     id: 'over',
     order: 1,
-    component: OverSection,
+    Component: OverSection,
 
     title: {
       en: 'About',
@@ -50,7 +50,7 @@ export const sections: Section[] = [
   {
     id: 'transport',
     order: 2,
-    component: TransportSection,
+    Component: TransportSection,
 
     title: {
       en: 'Assemble',
@@ -68,7 +68,7 @@ export const sections: Section[] = [
   {
     id: 'kar',
     order: 3,
-    component: KarSection,
+    Component: KarSection,
 
     title: {
       en: 'Cart',
@@ -86,7 +86,7 @@ export const sections: Section[] = [
   {
     id: 'kraan',
     order: 4,
-    component: KraanSection,
+    Component: KraanSection,
 
     title: {
       en: 'Crane',
@@ -104,7 +104,7 @@ export const sections: Section[] = [
   {
     id: 'koop',
     order: 7,
-    component: KoopSection,
+    Component: KoopSection,
 
     title: {
       en: 'Order',
@@ -122,7 +122,7 @@ export const sections: Section[] = [
   {
     id: 'overzicht',
     order: 8,
-    component: OverzichtSection,
+    Component: OverzichtSection,
 
     title: {
       en: 'Recap',
@@ -140,7 +140,7 @@ export const sections: Section[] = [
   {
     id: 'opslag',
     order: 5,
-    component: OpslagSection,
+    Component: OpslagSection,
 
     title: {
       en: 'Store',
@@ -158,7 +158,7 @@ export const sections: Section[] = [
   {
     id: 'gebruik',
     order: 6,
-    component: GebruikSection,
+    Component: GebruikSection,
 
     title: {
       en: 'Use',

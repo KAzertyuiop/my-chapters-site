@@ -57,15 +57,19 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       {sections
         .slice()
         .sort((a, b) => a.order - b.order)
-        .map(section => (
-          <section
-            key={section.id}
-            id={section.id}
-            style={{ height: '100vh' }}
-          >
-            <h1>{section.title.en}</h1>
-          </section>
-        ))}
+        .map(section => {
+          const SectionComponent = section.Component
+
+          return (
+            <section
+              key={section.id}
+              id={section.id}
+              style={{ height: '100vh' }}
+            >
+              <SectionComponent />
+            </section>
+          )
+        })}
     </main>
   )
 }
