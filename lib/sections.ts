@@ -43,7 +43,7 @@ export const sections: Section[] = [
       nl: 'Wat de Tentcarrier is en waarom die bestaat.',
     },
     og: {
-      image: '/og/about.jpg',
+      image: '/og/over.png',
     },
   },
 
@@ -61,7 +61,7 @@ export const sections: Section[] = [
       nl: 'Hoe de Tentcarrier wordt gemonteerd.',
     },
     og: {
-      image: '/og/assemble.jpg',
+      image: '/og/transport.png',
     },
   },
 
@@ -79,7 +79,7 @@ export const sections: Section[] = [
       nl: 'Bekijk je Tentcarrier-configuratie.',
     },
     og: {
-      image: '/og/cart.jpg',
+      image: '/og/kar.png',
     },
   },
 
@@ -97,7 +97,7 @@ export const sections: Section[] = [
       nl: 'Til de Tentcarrier moeiteloos op je voertuig.',
     },
     og: {
-      image: '/og/crane.jpg',
+      image: '/og/kraan.png',
     },
   },
 
@@ -115,7 +115,7 @@ export const sections: Section[] = [
       nl: 'Plaats je bestelling veilig.',
     },
     og: {
-      image: '/og/order.jpg',
+      image: '/og/koop.png',
     },
   },
 
@@ -133,7 +133,7 @@ export const sections: Section[] = [
       nl: 'Een volledig overzicht voor aankoop.',
     },
     og: {
-      image: '/og/recap.jpg',
+      image: '/og/overzicht.png',
     },
   },
 
@@ -151,7 +151,7 @@ export const sections: Section[] = [
       nl: 'Waar je de Tentcarrier kan kopen.',
     },
     og: {
-      image: '/og/store.jpg',
+      image: '/og/opslag.png',
     },
   },
 
@@ -169,7 +169,7 @@ export const sections: Section[] = [
       nl: 'Hoe je de Tentcarrier veilig en efficiënt gebruikt.',
     },
     og: {
-      image: '/og/use.jpg',
+      image: '/og/gebruik.png',
     },
   },
 ]

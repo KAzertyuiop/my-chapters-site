@@ -10,6 +10,6 @@ export const mainpagetexts = {
     nl: 'Moeiteloos daktenten hanteren.',
   },
   og: {
-    image: '/og/home.jpg',
+    image: '/og/main.png',
   }
 }

@@ -50,7 +50,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
 
   return (
     <main>
-      <section id="intro">
+      <section id="intro" style={{ height: '100vh' }}>
         <MainStart/>
       </section>
 
