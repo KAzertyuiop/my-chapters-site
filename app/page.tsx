@@ -10,7 +10,7 @@ export const metadata = {
   openGraph: {
     title: mainpagetexts.title[locale],
     description: mainpagetexts.description[locale],
-    url: 'https://yourdomain.com',
+    url: 'https://my-chapters-site.vercel.app',
     images: [
       {
         url: mainpagetexts.og.image,
