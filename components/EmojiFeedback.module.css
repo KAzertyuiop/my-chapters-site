@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+}
+
+.button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 150ms ease, opacity 150ms ease, filter 150ms ease;
+}
+
+.button:hover {
+  transform: scale(1.1);
+}
+
+.selected {
+  transform: scale(1.15);
+}
+
+.disabled {
+  opacity: 0.35;
+  filter: grayscale(100%);
+  cursor: default;
+}
+
+.disabled:hover {
+  transform: none;
+}
