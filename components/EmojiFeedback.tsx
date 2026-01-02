@@ -1,6 +1,6 @@
 'use client'
 
-import posthog from '@/lib/posthog'
+import posthog from 'posthog-js'
 
 type Props = {
   sectionId: string

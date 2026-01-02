@@ -1,15 +1,5 @@
-'use client'
-
+// PostHog is initialized in instrumentation-client.ts (Next.js 15.3+)
+// This file re-exports posthog for use in components
 import posthog from 'posthog-js'
-
-if (typeof window !== 'undefined') {
-  posthog.init(
-    process.env.NEXT_PUBLIC_POSTHOG_KEY!,
-    {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-      capture_pageview: true, // important: manual control
-    }
-  )
-}
 
 export default posthog

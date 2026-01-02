@@ -9,8 +9,11 @@ export default function KraanSection() {
         phone="32474403450"
         message="Different default message"
         className="whatsapp-link"
+        sectionId="kraan"
+        linkLabel="Crane inquiry"
       >
         Vraag over lift
-      </WhatsAppLink>    </>
+      </WhatsAppLink>
+    </>
   )
 }

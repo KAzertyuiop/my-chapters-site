@@ -1,12 +1,16 @@
 'use client'
 
 import MainStart from '@/components/MainStart'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { sections } from '@/lib/sections'
+import posthog from 'posthog-js'
 
 const sectionIds = sections.map(s => s.id)
 
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
+  // Track which sections have been viewed in this session to avoid duplicate events
+  const viewedSections = useRef<Set<string>>(new Set())
+
   // Scroll to section on direct navigation
   useEffect(() => {
     if (!scrollToId) return
@@ -15,7 +19,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     el?.scrollIntoView({ behavior: 'smooth' })
   }, [scrollToId])
 
-  // URL update on scroll
+  // URL update on scroll + PostHog section tracking
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -23,6 +27,25 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
           if (!entry.isIntersecting) return
 
           const id = entry.target.id
+
+          // Track section view only once per session
+          if (!viewedSections.current.has(id)) {
+            viewedSections.current.add(id)
+
+            if (id === 'intro') {
+              posthog.capture('intro_section_viewed', {
+                section_id: 'intro',
+                section_label: 'Introduction',
+              })
+            } else {
+              const sectionData = sections.find(s => s.id === id)
+              posthog.capture('section_viewed', {
+                section_id: id,
+                section_label: sectionData?.title?.en || id,
+                section_order: sectionData?.order,
+              })
+            }
+          }
 
           if (id === 'intro') {
             window.history.replaceState(null, '', '/')

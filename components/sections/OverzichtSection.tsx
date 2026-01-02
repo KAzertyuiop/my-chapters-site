@@ -9,6 +9,8 @@ export default function OverzichtSection() {
         phone="32474403450"
         message="Lorem ipsum default message"
         className="whatsapp-link"
+        sectionId="overzicht"
+        linkLabel="General inquiry"
       >
         Reach out
       </WhatsAppLink>
