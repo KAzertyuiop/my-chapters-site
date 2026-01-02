@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: section.title[locale],
     description: section.description[locale],
-    url: `https://yourdomain.com/${section.id}`,
+    url: `https://my-chapters-site.vercel.app/${section.id}`,
     images: [
       {
         url: section.og.image,
