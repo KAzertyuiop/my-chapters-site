@@ -39,7 +39,8 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       triggers.push(
         ScrollTrigger.create({
           trigger: introEl,
-          start: 'top center',
+          start: 'top 55%',
+          end: 'bottom 55%',
           onEnter: () => {
             setActiveSectionId('intro')
             window.history.replaceState(null, '', '/')
