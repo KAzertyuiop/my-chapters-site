@@ -1,15 +1,19 @@
 'use client'
 
 import MainStart from '@/components/MainStart'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { sections } from '@/lib/sections'
 import posthog from 'posthog-js'
+import WhatsAppLink from './WhatsAppLink'
 
 const sectionIds = sections.map(s => s.id)
 
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
   // Track which sections have been viewed in this session to avoid duplicate events
   const viewedSections = useRef<Set<string>>(new Set())
+
+  // ✅ NEW: active section state
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
 
   // Scroll to section on direct navigation
   useEffect(() => {
@@ -19,7 +23,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     el?.scrollIntoView({ behavior: 'smooth' })
   }, [scrollToId])
 
-  // URL update on scroll + PostHog section tracking
+  // URL update on scroll + PostHog section tracking + active section tracking
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -27,6 +31,9 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
           if (!entry.isIntersecting) return
 
           const id = entry.target.id
+
+          // ✅ NEW: mark this as the active section
+          setActiveSectionId(id)
 
           // Track section view only once per session
           if (!viewedSections.current.has(id)) {
@@ -47,6 +54,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
             }
           }
 
+          // URL handling
           if (id === 'intro') {
             window.history.replaceState(null, '', '/')
             return
@@ -57,7 +65,8 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
           }
         })
       },
-      { threshold: 0.6 }
+      // How much of the element should be visible before triggering
+      { threshold: 0.25 }
     )
 
     const intro = document.getElementById('intro')
@@ -69,30 +78,35 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     })
 
     return () => observer.disconnect()
-  }, [sectionIds])
+  }, [])
 
   return (
-    <main>
-      <section id="intro" style={{ height: '100vh' }}>
-        <MainStart/>
-      </section>
+    <>
+      {/* ✅ Now valid */}
+      <WhatsAppLink activeSectionId={activeSectionId} />
 
-      {sections
-        .slice()
-        .sort((a, b) => a.order - b.order)
-        .map(section => {
-          const SectionComponent = section.Component
+      <main>
+        <section id="intro" style={{ height: '200vh' }}>
+          <MainStart />
+        </section>
 
-          return (
-            <section
-              key={section.id}
-              id={section.id}
-              style={{ height: '100vh' }}
-            >
-              <SectionComponent />
-            </section>
-          )
-        })}
-    </main>
+        {sections
+          .slice()
+          .sort((a, b) => a.order - b.order)
+          .map(section => {
+            const SectionComponent = section.Component
+
+            return (
+              <section
+                key={section.id}
+                id={section.id}
+                style={{ height: '200vh' }}
+              >
+                <SectionComponent />
+              </section>
+            )
+          })}
+      </main>
+    </>
   )
 }

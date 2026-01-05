@@ -1,32 +1,25 @@
 'use client'
 
 import posthog from 'posthog-js'
+import styles from './WhatsAppLink.module.css'
+
+const PHONE = '32474403450'
 
 type WhatsAppLinkProps = {
-  phone: string
-  message: string
-  children: React.ReactNode
-  className?: string
-  sectionId?: string
-  linkLabel?: string
+  activeSectionId: string | null
 }
 
 export default function WhatsAppLink({
-  phone,
-  message,
-  children,
-  className,
-  sectionId,
-  linkLabel,
+  activeSectionId,
 }: WhatsAppLinkProps) {
-  const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+  const href = `https://wa.me/${PHONE}`
+  
+console.log('WhatsApp active section:', activeSectionId)
 
   const handleClick = () => {
-    posthog.capture('whatsapp_contact_clicked', {
-      phone_number: phone,
-      message_template: message,
-      section_id: sectionId,
-      link_label: linkLabel,
+    posthog.capture('whatsapp_contact_click', {
+      placement: 'global',
+      section_id: activeSectionId ?? 'unknown',
     })
   }
 
@@ -34,11 +27,12 @@ export default function WhatsAppLink({
     <a
       href={href}
       target="_blank"
-      rel="noopener"
-      className={className}
+      rel="noopener noreferrer"
+      className={styles.whatsapp}
       onClick={handleClick}
+      aria-label="WhatsApp bubble"
     >
-      {children}
+      WhatsApp
     </a>
   )
 }
