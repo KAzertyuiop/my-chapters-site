@@ -69,7 +69,8 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       triggers.push(
         ScrollTrigger.create({
           trigger: el,
-          start: 'top center', // 🔑 top of section hits viewport center
+          start: 'top center',
+          end: 'bottom 55%',
           onEnter: () => {
             setActiveSectionId(section.id)
             window.history.replaceState(null, '', `/${section.id}`)
