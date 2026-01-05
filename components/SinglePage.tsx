@@ -1,88 +1,103 @@
 'use client'
 
-import MainStart from '@/components/MainStart'
 import { useEffect, useRef, useState } from 'react'
-import { sections } from '@/lib/sections'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import posthog from 'posthog-js'
+
+import MainStart from '@/components/MainStart'
 import WhatsAppLink from './WhatsAppLink'
+import { sections } from '@/lib/sections'
+
+// Register GSAP plugins once (client-side)
+gsap.registerPlugin(ScrollTrigger)
 
 const sectionIds = sections.map(s => s.id)
 
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
-  // Track which sections have been viewed in this session to avoid duplicate events
+  // Track which sections have been viewed in this session
   const viewedSections = useRef<Set<string>>(new Set())
 
-  // ✅ NEW: active section state
+  // Active section (single source of truth)
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
 
-  // Scroll to section on direct navigation
+  // Instant jump on deep link (NO smooth scroll)
   useEffect(() => {
     if (!scrollToId) return
 
     const el = document.getElementById(scrollToId)
-    el?.scrollIntoView({ behavior: 'smooth' })
+    el?.scrollIntoView()
   }, [scrollToId])
 
-  // URL update on scroll + PostHog section tracking + active section tracking
+  // GSAP ScrollTrigger: active section + URL + PostHog
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return
+    const triggers: ScrollTrigger[] = []
 
-          const id = entry.target.id
+    // Intro
+    const introEl = document.getElementById('intro')
+    if (introEl) {
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: introEl,
+          start: 'top center',
+          onEnter: () => {
+            setActiveSectionId('intro')
+            window.history.replaceState(null, '', '/')
 
-          // ✅ NEW: mark this as the active section
-          setActiveSectionId(id)
-
-          // Track section view only once per session
-          if (!viewedSections.current.has(id)) {
-            viewedSections.current.add(id)
-
-            if (id === 'intro') {
+            if (!viewedSections.current.has('intro')) {
+              viewedSections.current.add('intro')
               posthog.capture('intro_section_viewed', {
                 section_id: 'intro',
                 section_label: 'Introduction',
               })
-            } else {
-              const sectionData = sections.find(s => s.id === id)
+            }
+          },
+          onEnterBack: () => {
+            setActiveSectionId('intro')
+            window.history.replaceState(null, '', '/')
+          },
+        })
+      )
+    }
+
+    // Sections
+    sections.forEach(section => {
+      const el = document.getElementById(section.id)
+      if (!el) return
+
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top center', // 🔑 top of section hits viewport center
+          onEnter: () => {
+            setActiveSectionId(section.id)
+            window.history.replaceState(null, '', `/${section.id}`)
+
+            if (!viewedSections.current.has(section.id)) {
+              viewedSections.current.add(section.id)
               posthog.capture('section_viewed', {
-                section_id: id,
-                section_label: sectionData?.title?.en || id,
-                section_order: sectionData?.order,
+                section_id: section.id,
+                section_label: section.title?.en || section.id,
+                section_order: section.order,
               })
             }
-          }
-
-          // URL handling
-          if (id === 'intro') {
-            window.history.replaceState(null, '', '/')
-            return
-          }
-
-          if (sectionIds.includes(id)) {
-            window.history.replaceState(null, '', `/${id}`)
-          }
+          },
+          onEnterBack: () => {
+            setActiveSectionId(section.id)
+            window.history.replaceState(null, '', `/${section.id}`)
+          },
         })
-      },
-      // How much of the element should be visible before triggering
-      { threshold: 0.25 }
-    )
-
-    const intro = document.getElementById('intro')
-    if (intro) observer.observe(intro)
-
-    sectionIds.forEach(id => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
+      )
     })
 
-    return () => observer.disconnect()
+    return () => {
+      triggers.forEach(t => t.kill())
+    }
   }, [])
 
   return (
     <>
-      {/* ✅ Now valid */}
+      {/* Uses GSAP-driven activeSectionId */}
       <WhatsAppLink activeSectionId={activeSectionId} />
 
       <main>
