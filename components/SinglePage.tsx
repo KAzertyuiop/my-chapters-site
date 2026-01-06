@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import posthog from 'posthog-js'
@@ -13,18 +13,47 @@ import { sections } from '@/lib/sections'
 // Register GSAP plugins once (client-side)
 gsap.registerPlugin(ScrollTrigger)
 
+// ✅ single source of truth for order used in render + triggers
+const orderedSections = sections.slice().sort((a, b) => a.order - b.order)
+
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
   const viewedSections = useRef<Set<string>>(new Set())
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
 
-  // ✅ single source of truth for order used in render + triggers
-  const orderedSections = sections.slice().sort((a, b) => a.order - b.order)
-
   // Instant jump on deep link (NO smooth scroll)
-  useEffect(() => {
-    if (!scrollToId) return
-    const el = document.getElementById(scrollToId)
-    el?.scrollIntoView()
+  // Robust: works even if scrollToId isn't passed, and retries while content mounts.
+  useLayoutEffect(() => {
+    const pathId = typeof window !== 'undefined' ? window.location.pathname.replace(/^\//, '') : ''
+    const targetId = (scrollToId || pathId || '').trim()
+
+    // Nothing to scroll to (home route)
+    if (!targetId) return
+
+    let cancelled = false
+    const startedAt = performance.now()
+
+    const tryScroll = () => {
+      if (cancelled) return
+
+      const el = document.getElementById(targetId)
+      if (el) {
+        el.scrollIntoView({ block: 'start' })
+        // Ensure ScrollTrigger recalculates positions after the jump
+        ScrollTrigger.refresh()
+        return
+      }
+
+      // Retry for up to ~2s while components/hydration settle
+      if (performance.now() - startedAt < 2000) {
+        requestAnimationFrame(tryScroll)
+      }
+    }
+
+    requestAnimationFrame(tryScroll)
+
+    return () => {
+      cancelled = true
+    }
   }, [scrollToId])
 
   // GSAP ScrollTrigger: active section + URL + PostHog
@@ -90,10 +119,12 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       )
     })
 
+    ScrollTrigger.refresh()
+
     return () => {
       triggers.forEach((t) => t.kill())
     }
-  }, [orderedSections])
+  }, [])
 
   return (
     <>
