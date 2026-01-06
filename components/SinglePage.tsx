@@ -7,6 +7,7 @@ import posthog from 'posthog-js'
 
 import MainStart from '@/components/MainStart'
 import WhatsAppLink from './WhatsAppLink'
+import GlobalNav from './GlobalNav'
 import { sections } from '@/lib/sections'
 
 // Register GSAP plugins once (client-side)
@@ -39,8 +40,8 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       triggers.push(
         ScrollTrigger.create({
           trigger: introEl,
-          start: 'top 55%',
-          end: 'bottom 55%',
+          start: 'top 20%',
+          end: 'bottom 20%',
           onEnter: () => {
             setActiveSectionId('intro')
             window.history.replaceState(null, '', '/')
@@ -69,8 +70,8 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       triggers.push(
         ScrollTrigger.create({
           trigger: el,
-          start: 'top center',
-          end: 'bottom 55%',
+          start: 'top 20%',
+          end: 'bottom 20%',
           onEnter: () => {
             setActiveSectionId(section.id)
             window.history.replaceState(null, '', `/${section.id}`)
@@ -100,6 +101,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
   return (
     <>
       {/* Uses GSAP-driven activeSectionId */}
+      <GlobalNav activeSectionId={activeSectionId} />
       <WhatsAppLink activeSectionId={activeSectionId} />
 
       <main>
