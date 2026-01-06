@@ -13,19 +13,16 @@ import { sections } from '@/lib/sections'
 // Register GSAP plugins once (client-side)
 gsap.registerPlugin(ScrollTrigger)
 
-const sectionIds = sections.map(s => s.id)
-
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
-  // Track which sections have been viewed in this session
   const viewedSections = useRef<Set<string>>(new Set())
-
-  // Active section (single source of truth)
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
+
+  // ✅ single source of truth for order used in render + triggers
+  const orderedSections = sections.slice().sort((a, b) => a.order - b.order)
 
   // Instant jump on deep link (NO smooth scroll)
   useEffect(() => {
     if (!scrollToId) return
-
     const el = document.getElementById(scrollToId)
     el?.scrollIntoView()
   }, [scrollToId])
@@ -62,8 +59,8 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       )
     }
 
-    // Sections
-    sections.forEach(section => {
+    // ✅ Sections in correct order
+    orderedSections.forEach((section) => {
       const el = document.getElementById(section.id)
       if (!el) return
 
@@ -94,37 +91,28 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     })
 
     return () => {
-      triggers.forEach(t => t.kill())
+      triggers.forEach((t) => t.kill())
     }
-  }, [])
+  }, [orderedSections])
 
   return (
     <>
-      {/* Uses GSAP-driven activeSectionId */}
       <GlobalNav activeSectionId={activeSectionId} />
       <WhatsAppLink activeSectionId={activeSectionId} />
 
       <main>
-        <section id="intro" style={{ height: '200vh' }}>
+        <section id="intro" className="section">
           <MainStart />
         </section>
 
-        {sections
-          .slice()
-          .sort((a, b) => a.order - b.order)
-          .map(section => {
-            const SectionComponent = section.Component
-
-            return (
-              <section
-                key={section.id}
-                id={section.id}
-                style={{ height: '200vh' }}
-              >
-                <SectionComponent />
-              </section>
-            )
-          })}
+        {orderedSections.map((section) => {
+          const SectionComponent = section.Component
+          return (
+            <section key={section.id} id={section.id} className="section">
+              <SectionComponent />
+            </section>
+          )
+        })}
       </main>
     </>
   )

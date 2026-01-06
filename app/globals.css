@@ -39,7 +39,8 @@ body {
 }
 
 .section {
-  padding: var(--section-padding) 0;
+  /*padding: var(--section-padding) 0;*/
+  height: 200vh;
 }
 
 .section + .section {

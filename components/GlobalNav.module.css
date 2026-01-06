@@ -30,3 +30,22 @@
   font-size: 14px;
   font-weight: 600;
 }
+
+/* NEW: right-side stacked bars */
+.stack {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-end;
+}
+
+.stackLine {
+  height: 2px;
+  width: 34px;              /* this is the “max width” */
+  background: #000;
+  border-radius: 999px;
+  transform-origin: right center;
+  transform: scaleX(0.2);    /* default before JS kicks in */
+  opacity: 1;
+}
