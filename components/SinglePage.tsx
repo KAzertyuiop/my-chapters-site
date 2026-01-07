@@ -1,8 +1,6 @@
 'use client'
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import posthog from 'posthog-js'
 
 import MainStart from '@/components/MainStart'
@@ -10,24 +8,46 @@ import WhatsAppLink from './WhatsAppLink'
 import GlobalNav from './GlobalNav'
 import { sections } from '@/lib/sections'
 
-// Register GSAP plugins once (client-side)
-gsap.registerPlugin(ScrollTrigger)
-
-// ✅ single source of truth for order used in render + triggers
 const orderedSections = sections.slice().sort((a, b) => a.order - b.order)
 
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
   const viewedSections = useRef<Set<string>>(new Set())
-  const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
 
-  // Instant jump on deep link (NO smooth scroll)
-  // Robust: works even if scrollToId isn't passed, and retries while content mounts.
+  // ✅ hydration-safe: no window access here
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(() => {
+    return (scrollToId || 'intro').trim() || 'intro'
+  })
+
+  const allSectionIds = useMemo(() => ['intro', ...orderedSections.map((s) => s.id)], [])
+
+  const scrollToSection = (id: string, behavior: ScrollBehavior) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    el.scrollIntoView({ behavior, block: 'start' })
+  }
+
+  // ✅ Deep-link entry (instant), from prop OR URL path
   useLayoutEffect(() => {
     const pathId = typeof window !== 'undefined' ? window.location.pathname.replace(/^\//, '') : ''
     const targetId = (scrollToId || pathId || '').trim()
 
-    // Nothing to scroll to (home route)
-    if (!targetId) return
+    // Prevent browser/Next scroll restoration from overriding our jump
+    const prevRestoration =
+      'scrollRestoration' in window.history ? window.history.scrollRestoration : undefined
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+
+    if (!targetId) {
+      setActiveSectionId('intro')
+      return () => {
+        if (prevRestoration && 'scrollRestoration' in window.history) {
+          window.history.scrollRestoration = prevRestoration
+        }
+      }
+    }
+
+    setActiveSectionId(targetId)
 
     let cancelled = false
     const startedAt = performance.now()
@@ -37,13 +57,22 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
 
       const el = document.getElementById(targetId)
       if (el) {
-        el.scrollIntoView({ block: 'start' })
-        // Ensure ScrollTrigger recalculates positions after the jump
-        ScrollTrigger.refresh()
+        // Force an instant jump even if global CSS has `scroll-behavior: smooth`.
+        const html = document.documentElement
+        const prevScrollBehavior = html.style.scrollBehavior
+        html.style.scrollBehavior = 'auto'
+
+        // Use explicit top + double rAF to run after any framework scroll adjustments
+        const top = window.scrollY + el.getBoundingClientRect().top
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top, behavior: 'auto' })
+            html.style.scrollBehavior = prevScrollBehavior
+          })
+        })
         return
       }
 
-      // Retry for up to ~2s while components/hydration settle
       if (performance.now() - startedAt < 2000) {
         requestAnimationFrame(tryScroll)
       }
@@ -53,78 +82,114 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
 
     return () => {
       cancelled = true
+      if (prevRestoration && 'scrollRestoration' in window.history) {
+        window.history.scrollRestoration = prevRestoration
+      }
     }
   }, [scrollToId])
 
-  // GSAP ScrollTrigger: active section + URL + PostHog
+  // future smooth navigation hook
   useEffect(() => {
-    const triggers: ScrollTrigger[] = []
-
-    // Intro
-    const introEl = document.getElementById('intro')
-    if (introEl) {
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: introEl,
-          start: 'top 20%',
-          end: 'bottom 20%',
-          onEnter: () => {
-            setActiveSectionId('intro')
-            window.history.replaceState(null, '', '/')
-
-            if (!viewedSections.current.has('intro')) {
-              viewedSections.current.add('intro')
-              posthog.capture('intro_section_viewed', {
-                section_id: 'intro',
-                section_label: 'Introduction',
-              })
-            }
-          },
-          onEnterBack: () => {
-            setActiveSectionId('intro')
-            window.history.replaceState(null, '', '/')
-          },
-        })
-      )
+    const handler = (e: Event) => {
+      const ce = e as CustomEvent<{ id: string; behavior?: ScrollBehavior }>
+      const id = ce.detail?.id
+      if (!id) return
+      scrollToSection(id, ce.detail.behavior ?? 'smooth')
     }
-
-    // ✅ Sections in correct order
-    orderedSections.forEach((section) => {
-      const el = document.getElementById(section.id)
-      if (!el) return
-
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'top 20%',
-          end: 'bottom 20%',
-          onEnter: () => {
-            setActiveSectionId(section.id)
-            window.history.replaceState(null, '', `/${section.id}`)
-
-            if (!viewedSections.current.has(section.id)) {
-              viewedSections.current.add(section.id)
-              posthog.capture('section_viewed', {
-                section_id: section.id,
-                section_label: section.title?.en || section.id,
-                section_order: section.order,
-              })
-            }
-          },
-          onEnterBack: () => {
-            setActiveSectionId(section.id)
-            window.history.replaceState(null, '', `/${section.id}`)
-          },
-        })
-      )
-    })
-
-    ScrollTrigger.refresh()
-
-    return () => {
-      triggers.forEach((t) => t.kill())
-    }
+    window.addEventListener('navigateToSection', handler as EventListener)
+    return () => window.removeEventListener('navigateToSection', handler as EventListener)
   }, [])
+
+  // IO dominance
+  useEffect(() => {
+    const elements = allSectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[]
+    if (!elements.length) return
+
+    const ratios = new Map<string, number>()
+    const activeRef = { current: activeSectionId }
+
+    const DOMINANCE = 0.6
+    const MARGIN = 0.12
+    const thresholds = Array.from({ length: 21 }, (_, i) => i / 20)
+
+    const pickActive = () => {
+      const currentId = activeRef.current
+      const currentRatio = currentId ? ratios.get(currentId) ?? 0 : 0
+
+      let bestId: string | null = null
+      let bestRatio = -1
+
+      for (const [id, r] of ratios.entries()) {
+        if (r > bestRatio) {
+          bestRatio = r
+          bestId = id
+        }
+      }
+      if (!bestId) return
+
+      if (!currentId) {
+        activeRef.current = bestId
+        setActiveSectionId(bestId)
+        return
+      }
+
+      const shouldSwitch =
+        bestId !== currentId && (bestRatio >= DOMINANCE || bestRatio > currentRatio + MARGIN)
+
+      if (shouldSwitch) {
+        activeRef.current = bestId
+        setActiveSectionId(bestId)
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = (entry.target as HTMLElement).id
+          ratios.set(id, entry.intersectionRatio)
+        }
+        pickActive()
+      },
+      { root: null, threshold: thresholds }
+    )
+
+    elements.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allSectionIds])
+
+  // URL + analytics
+  useEffect(() => {
+    if (!activeSectionId) return
+
+    const path = activeSectionId === 'intro' ? '/' : `/${activeSectionId}`
+    window.history.replaceState(null, '', path)
+
+    if (activeSectionId === 'intro') {
+      if (!viewedSections.current.has('intro')) {
+        viewedSections.current.add('intro')
+        posthog.capture('intro_section_viewed', {
+          section_id: 'intro',
+          section_label: 'Introduction',
+        })
+      }
+      return
+    }
+
+    const s = orderedSections.find((sec) => sec.id === activeSectionId)
+    if (!s) return
+
+    if (!viewedSections.current.has(s.id)) {
+      viewedSections.current.add(s.id)
+      posthog.capture('section_viewed', {
+        section_id: s.id,
+        section_label: s.title?.en || s.id,
+        section_order: s.order,
+      })
+    }
+  }, [activeSectionId])
 
   return (
     <>
