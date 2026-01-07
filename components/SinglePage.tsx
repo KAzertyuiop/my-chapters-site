@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import posthog from 'posthog-js'
@@ -17,20 +18,46 @@ gsap.registerPlugin(ScrollTrigger)
 const orderedSections = sections.slice().sort((a, b) => a.order - b.order)
 
 export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
+  const router = useRouter()
+  const pathname = usePathname()
+
   const viewedSections = useRef<Set<string>>(new Set())
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
 
-  // Instant jump on deep link (NO smooth scroll)
-  // Robust: works even if scrollToId isn't passed, and retries while content mounts.
-  useLayoutEffect(() => {
-    const pathId = typeof window !== 'undefined' ? window.location.pathname.replace(/^\//, '') : ''
-    const targetId = (scrollToId || pathId || '').trim()
+  // Prevent ScrollTrigger from rewriting the URL before the initial deep-link jump completes
+  const initialJumpDone = useRef(false)
 
-    // Nothing to scroll to (home route)
-    if (!targetId) return
+  // Capture the entry pathname once and avoid re-running the deep-link jump when we update the URL while scrolling.
+  const initialPathIdRef = useRef<string | null>(null)
+  const initialScrollHandledRef = useRef(false)
+
+  // Instant jump on deep link (NO smooth scroll)
+  // Run only on initial entry (or when scrollToId prop changes), not on our own router.replace() updates.
+  useLayoutEffect(() => {
+    if (initialPathIdRef.current === null) {
+      initialPathIdRef.current = (pathname || '/').replace(/^\/+/, '').trim()
+    }
+
+    const targetId = (scrollToId || initialPathIdRef.current || '').trim()
+
+    // Home route: nothing to jump to
+    if (!targetId) {
+      initialScrollHandledRef.current = true
+      initialJumpDone.current = true
+      return
+    }
+
+    // If we already handled the initial jump for the entry route, don't do it again.
+    // (Prevents fighting URL updates while scrolling.)
+    if (initialScrollHandledRef.current && !scrollToId) {
+      initialJumpDone.current = true
+      return
+    }
+
+    initialJumpDone.current = false
 
     let cancelled = false
-    const startedAt = performance.now()
+    let frames = 0
 
     const tryScroll = () => {
       if (cancelled) return
@@ -38,14 +65,17 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       const el = document.getElementById(targetId)
       if (el) {
         el.scrollIntoView({ block: 'start' })
-        // Ensure ScrollTrigger recalculates positions after the jump
         ScrollTrigger.refresh()
+        initialScrollHandledRef.current = true
+        initialJumpDone.current = true
         return
       }
 
-      // Retry for up to ~2s while components/hydration settle
-      if (performance.now() - startedAt < 2000) {
-        requestAnimationFrame(tryScroll)
+      // Retry briefly while the DOM mounts (up to ~1s at 60fps)
+      if (frames++ < 60) requestAnimationFrame(tryScroll)
+      else {
+        // Give up gracefully
+        initialJumpDone.current = true
       }
     }
 
@@ -60,6 +90,14 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
   useEffect(() => {
     const triggers: ScrollTrigger[] = []
 
+    const updateUrl = (id: string) => {
+      // Avoid fighting the initial deep-link jump; the URL is already correct on entry.
+      if (!initialJumpDone.current) return
+
+      if (id === 'intro') router.replace('/', { scroll: false })
+      else router.replace(`/${id}`, { scroll: false })
+    }
+
     // Intro
     const introEl = document.getElementById('intro')
     if (introEl) {
@@ -68,9 +106,11 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
           trigger: introEl,
           start: 'top 20%',
           end: 'bottom 20%',
-          onEnter: () => {
+          onToggle: (self) => {
+            if (!self.isActive) return
+
             setActiveSectionId('intro')
-            window.history.replaceState(null, '', '/')
+            updateUrl('intro')
 
             if (!viewedSections.current.has('intro')) {
               viewedSections.current.add('intro')
@@ -79,10 +119,6 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
                 section_label: 'Introduction',
               })
             }
-          },
-          onEnterBack: () => {
-            setActiveSectionId('intro')
-            window.history.replaceState(null, '', '/')
           },
         })
       )
@@ -98,9 +134,11 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
           trigger: el,
           start: 'top 20%',
           end: 'bottom 20%',
-          onEnter: () => {
+          onToggle: (self) => {
+            if (!self.isActive) return
+
             setActiveSectionId(section.id)
-            window.history.replaceState(null, '', `/${section.id}`)
+            updateUrl(section.id)
 
             if (!viewedSections.current.has(section.id)) {
               viewedSections.current.add(section.id)
@@ -111,10 +149,6 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
               })
             }
           },
-          onEnterBack: () => {
-            setActiveSectionId(section.id)
-            window.history.replaceState(null, '', `/${section.id}`)
-          },
         })
       )
     })
@@ -124,7 +158,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     return () => {
       triggers.forEach((t) => t.kill())
     }
-  }, [])
+  }, [router])
 
   return (
     <>
