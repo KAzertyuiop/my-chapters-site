@@ -12,7 +12,8 @@
   --color-z: #064e3b;
 
   --max-width: 72rem;
-  --section-padding: 6rem;
+  --content-section-padding-above-below: 1rem;
+  --content-padding-left-right: 1rem;
 }
 
 * {
@@ -20,6 +21,7 @@
 }
 
 html {
+  font-size: 16px; /* Defines rem = by default 16px */
   scroll-behavior: smooth;
 }
 
@@ -32,15 +34,16 @@ body {
   line-height: 1.6;
 }
 
-.page {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
+
 
 .section {
-  /*padding: var(--section-padding) 0;*/
-  height: 200vh;
+  padding: var(--content-section-padding-above-below) 0;
+}
+
+.page { /* .page (elbow gutters left right) lives inside .section (vertical rhythm) */
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding-left-right);
 }
 
 .section + .section {
