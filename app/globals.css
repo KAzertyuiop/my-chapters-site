@@ -12,8 +12,10 @@
   --color-z: #064e3b;
 
   --max-width: 72rem;
-  --content-section-padding-above-below: 1rem;
-  --content-padding-left-right: 1rem;
+
+  /* Spacing scale (mobile-first). Adjust once here, whole site follows. */
+  --content-section-padding-y: 2.5rem;
+  --content-padding-x: 1rem;
 }
 
 * {
@@ -29,21 +31,19 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
   line-height: 1.6;
 }
 
-
-
 .section {
-  padding: var(--content-section-padding-above-below) 0;
+  padding: var(--content-section-padding-y) 0;
 }
 
-.page { /* .page (elbow gutters left right) lives inside .section (vertical rhythm) */
+.container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--content-padding-left-right);
+  padding: 0 var(--content-padding-x);
 }
 
 .section + .section {
@@ -60,6 +60,23 @@ body {
   color: var(--muted);
 }
 
+/* Laptop / desktop+ */
+@media (min-width: 1024px) {
+  :root {
+    --content-section-padding-y: 5.5rem;
+    --content-padding-x: 2rem;
+  }
+}
+
+/* Optional: section size modifiers (use as className="section section--compact" etc.) */
+.section--compact {
+  padding: calc(var(--content-section-padding-y) * 0.65) 0;
+}
+
+.section--spacious {
+  padding: calc(var(--content-section-padding-y) * 1.25) 0;
+}
+
 #gebruik .highlight {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -67,7 +84,6 @@ body {
   border-left: 4px solid var(--accent);
   font-weight: 500;
 }
-
 
 #gebruik {
   background: var(--bg, white);
@@ -93,7 +109,6 @@ body {
 #transport {
   background: var(--bg, white);
 }
-
 
 .whatsapp-link {
   display: inline-flex;
