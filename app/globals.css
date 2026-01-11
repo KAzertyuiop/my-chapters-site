@@ -24,7 +24,7 @@
 
 html {
   font-size: 16px; /* Defines rem = by default 16px */
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
