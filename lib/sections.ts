@@ -151,7 +151,7 @@ export const sections: Section[] = [
       nl: 'Waar je de Tentcarrier kan kopen.',
     },
     og: {
-      image: '/og/opslag2.png',
+      image: '/og/opslag3.png',
     },
   },
 
