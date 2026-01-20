@@ -5,7 +5,7 @@ export default function MainStart() {
       <p>Bla bla intro section</p>
       <div style={{ maxWidth: '100%', width: '100%' }}>
         <img
-          src="/svg/platformtest1.svg"
+          src="/svg/introtest.svg"
           alt="Test"
           style={{ width: '100%', height: 'auto', display: 'block' }}
         />
