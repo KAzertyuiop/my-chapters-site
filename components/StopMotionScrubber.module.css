@@ -1,0 +1,150 @@
+.player {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.frameWrap {
+  width: 100%;
+  max-height: 45vh;
+  margin-bottom: 18px;
+}
+
+.frame {
+  width: 100%;
+  max-height: 45vh;
+  object-fit: contain;
+  display: block;
+}
+
+/* labels */
+.labels {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  user-select: none;
+}
+
+
+.labels a {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  text-decoration: none;
+  font-size: 18px;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+.labels a:hover {
+  color: #ff0808;
+}
+
+.labels a[data-active="true"] {
+  opacity: 1;
+  font-weight: 600;
+}
+
+/* range reset */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-x;
+}
+
+/* track */
+.range::-webkit-slider-runnable-track {
+  height: 6px;
+  margin: 20px 0;
+  background: #000;
+}
+.range::-moz-range-track {
+  height: 10px;
+  background: #000;
+}
+
+/* thumb */
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 46px;
+  background: #000;
+  border-radius: 2px;
+  margin-top: -20px;
+}
+.range::-moz-range-thumb {
+  width: 8px;
+  height: 46px;
+  background: #000;
+  border-radius: 2px;
+}
+
+
+
+
+
+.playPause {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.playPause:active {
+  transform: translateY(1px);
+}
+
+.playPause:focus {
+  outline: none;
+}
+
+.playPause:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 3px;
+}
+
+/* Icons (pure CSS) */
+.playIcon {
+  width: 0;
+  height: 0;
+  border-left: 14px solid #111;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  margin-left: 2px; /* centers triangle visually */
+}
+
+.pauseIcon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.pauseIcon::before,
+.pauseIcon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 5px;
+  height: 16px;
+  background: #111;
+  border-radius: 2px;
+}
+
+.pauseIcon::before {
+  left: 0;
+}
+
+.pauseIcon::after {
+  right: 0;
+}
