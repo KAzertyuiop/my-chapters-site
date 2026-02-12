@@ -9,7 +9,7 @@ type JumpPoint = {
 };
 
 const FPS = 8;
-const SEEK_FPS = 40;
+const SEEK_FPS = 25;
 const AUTOPLAY = true;
 const LOOP = true;
 const PAUSE_ON_USER = true;
