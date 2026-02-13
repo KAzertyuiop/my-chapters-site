@@ -3,8 +3,7 @@ import StopMotionScrubber from "./StopMotionScrubber";
 export default function MainStart() {
   return (
     <>
-      <h2>De start</h2>
-      <p>Bla bla intro section</p>
+      <h1>Hanteer je daktent met gemak</h1>
 
       <section>
         <StopMotionScrubber />

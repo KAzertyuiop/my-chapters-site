@@ -198,9 +198,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
 
       <main>
         <section id="intro" className="section">
-          <div className="container">
-            <MainStart />
-          </div>
+          <MainStart />
         </section>
 
         {orderedSections.map((section) => {

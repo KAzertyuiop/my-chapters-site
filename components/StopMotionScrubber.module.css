@@ -1,83 +1,93 @@
 .player {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  position: relative
+  position: relative;
+  background-color: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    height: 600px;
+
 }
 
 .frameWrap {
   width: 100%;
-  max-height: 100vh;
 }
 
 .frame {
   width: 100%;
-  max-height: 100vh;
   object-fit: contain;
   display: block;
 }
 
 /* labels */
 .labels {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
+    width: 100%;
+    padding: 0 10px;    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    margin-top: 100px;
 }
 
-
 .labels a {
-  padding: 12px 0;
-  color: #000;
-  text-decoration: none;
-  font-size: 14px;
-  line-height: 1.2;
-  white-space: nowrap;
-  opacity: 0.5;
+padding: 12px 0;
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: nowrap;
+    opacity: 1;
 }
 .labels a:hover {
   color: #ff0808;
 }
 
 .labels a[data-active="true"] {
-  color: #000000;
-  opacity: 1;
+    color: #000000;
+    opacity: 1;
+    font-weight: 600;   
 }
 
 /* range reset */
 .range {
+    width: 100%;
   -webkit-appearance: none;
   appearance: none;
-  width: 100%;
   background: transparent;
   cursor: pointer;
   touch-action: pan-x;
-  margin-bottom: 60px;
 }
 
 /* track */
 .range::-webkit-slider-runnable-track {
   height: 2px;
-  margin: 20px 20px;
+  margin: 30px 30px;
   background: #000;
 }
 .range::-moz-range-track {
-  height: 10px;
+  height: 2px;
   background: #000;
 }
 
 /* thumb */
 .range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 8px;
-  height: 46px;
-  background: #000;
+  width: 6px;
+  height: 62px;
+  background: #000000;
   border-radius: 2px;
-  margin-top: -20px;
+  margin-top: -30px;
 }
 .range::-moz-range-thumb {
-  width: 8px;
-  height: 46px;
+  width: 6px;
+  height: 62px;
   background: #000;
   border-radius: 2px;
+  margin-top: -30px;
 }
 
 
@@ -153,11 +163,12 @@ Pause Card (black banner)
 
 .pauseCardWrapper {
   position: absolute;
-  bottom: 140px;
+  bottom: 100px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
+  margin: 0 20px;
 }
 
 .pauseCard {
@@ -177,19 +188,23 @@ Pause Card (black banner)
   gap: 24px;
 
   /* small fade-in feeling */
-  animation: fadeInCard 0.25s ease-out;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-@keyframes fadeInCard {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
+/* Toggle visibility (prevents flashes + enables smooth fade) */
+.pauseCardHidden {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
 }
+
+.pauseCardVisible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
 
 /* Left text block */
 .pauseText {

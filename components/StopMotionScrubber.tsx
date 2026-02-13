@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./StopMotionScrubber.module.css";
-import { CHAPTERS } from "@/lib/scrubberchapters"; // ✅ your new lib file
+import { CHAPTERS } from "@/lib/scrubberchapters";
 
 const FPS = 8;
 const SEEK_FPS = 25;
@@ -11,8 +11,10 @@ const LOOP = true; // ping-pong keeps going
 const PAUSE_ON_USER = true;
 const TOTAL_FRAMES = 88;
 
+// Delay before showing the pause card (prevents flashes)
+const CARD_SHOW_DELAY_MS = 200;
+
 export default function StopMotionScrubber() {
-  // ✅ Stable frames (not recreated every render)
   const frames = useMemo(
     () =>
       Array.from({ length: TOTAL_FRAMES }, (_, i) =>
@@ -21,7 +23,6 @@ export default function StopMotionScrubber() {
     []
   );
 
-  // ✅ Holds derived from CHAPTERS (no separate HOLDS_MS)
   const holdsMs = useMemo(() => {
     const map: Record<number, number> = {};
     for (const c of CHAPTERS) {
@@ -32,20 +33,19 @@ export default function StopMotionScrubber() {
 
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(AUTOPLAY);
-
-  // Selected chapter link separate from index
   const [activeLinkIndex, setActiveLinkIndex] = useState<number | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Ping-pong direction: +1 (to the right) or -1 (to the left)
   const dirRef = useRef<1 | -1>(1);
 
-  // Seeking state
   const seekTimerRef = useRef<NodeJS.Timeout | null>(null);
   const seekTargetRef = useRef<number | null>(null);
 
-  // ✅ Preload frames once
+  // ✅ Pause-card visibility state (delayed)
+  const [cardVisible, setCardVisible] = useState(false);
+  const cardDelayRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Preload frames once
   useEffect(() => {
     let cancelled = false;
 
@@ -57,9 +57,7 @@ export default function StopMotionScrubber() {
           try {
             // @ts-ignore
             if (img.decode) await img.decode();
-          } catch {
-            // ignore decode issues (SVG decode can be inconsistent)
-          }
+          } catch {}
           if (cancelled) return;
         })
       );
@@ -77,7 +75,6 @@ export default function StopMotionScrubber() {
   }
 
   function startSeek(target: number) {
-    // Clicking a chapter pauses autoplay (and selects the link)
     setPlaying(false);
     setActiveLinkIndex(target);
 
@@ -111,8 +108,6 @@ export default function StopMotionScrubber() {
   }
 
   // Which chapter card to show:
-  // 1) if user explicitly selected a link: show that chapter
-  // 2) else: if we're on a hold frame: show that chapter
   const cardChapter = useMemo(() => {
     if (activeLinkIndex !== null) {
       return CHAPTERS.find((c) => c.index === activeLinkIndex) ?? null;
@@ -121,6 +116,28 @@ export default function StopMotionScrubber() {
     if (hold > 0) return CHAPTERS.find((c) => c.index === index) ?? null;
     return null;
   }, [activeLinkIndex, holdsMs, index]);
+
+  // ✅ Delay show/hide to prevent flashes
+  useEffect(() => {
+    // clear any pending timer
+    if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
+
+    if (!cardChapter) {
+      // hide immediately when there is no chapter
+      setCardVisible(false);
+      return;
+    }
+
+    // show after a short delay (prevents brief flashes)
+    setCardVisible(false);
+    cardDelayRef.current = setTimeout(() => {
+      setCardVisible(true);
+    }, CARD_SHOW_DELAY_MS);
+
+    return () => {
+      if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
+    };
+  }, [cardChapter]);
 
   // Autoplay logic: ping-pong (left↔right), includes holds
   useEffect(() => {
@@ -135,7 +152,6 @@ export default function StopMotionScrubber() {
         const last = frames.length - 1;
         let next = prev + dirRef.current;
 
-        // Bounce at the ends (ping-pong)
         if (next > last) {
           if (!LOOP) return prev;
           dirRef.current = -1;
@@ -155,21 +171,21 @@ export default function StopMotionScrubber() {
     };
   }, [index, playing, frames.length, holdsMs]);
 
-  // Cleanup seek timer on unmount
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopSeek();
+      if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
     };
   }, []);
 
   function handleUserSetFrame(newIndex: number) {
     stopSeek();
-    setActiveLinkIndex(null); // scrubbing = no selected chapter
+    setActiveLinkIndex(null);
     if (PAUSE_ON_USER) setPlaying(false);
     setIndex(newIndex);
   }
 
-  // If you re-enable play/pause later
   function togglePlayPause() {
     stopSeek();
     setActiveLinkIndex(null);
@@ -182,39 +198,25 @@ export default function StopMotionScrubber() {
         <img src={frames[index]} alt="" className={styles.frame} />
       </div>
 
-      {/* Pause-card appears during holds OR when a chapter link is selected */}
       {cardChapter && (
         <div className={styles.pauseCardWrapper}>
-            <div className={styles.pauseCard}>
+          <div
+            className={`${styles.pauseCard} ${
+              cardVisible ? styles.pauseCardVisible : styles.pauseCardHidden
+            }`}
+          >
             <div className={styles.pauseText}>
-                {/* <div className={styles.pauseTitle}>{cardChapter.title}</div> */}
-                <div className={styles.pauseBody}>{cardChapter.body}</div>
+              <div className={styles.pauseBody}>{cardChapter.body}</div>
             </div>
 
             <button type="button" className={styles.pauseCta} aria-label="Meer info">
-                +
+              +
             </button>
-            </div>
+          </div>
         </div>
       )}
 
       <nav className={styles.labels}>
-        {/* play/pause button hidden for now? keep it commented or hide with CSS */}
-        {/*
-        <button
-          type="button"
-          className={styles.playPause}
-          aria-label={playing ? "Pause autoplay" : "Play autoplay"}
-          onClick={togglePlayPause}
-        >
-          {playing ? (
-            <span className={styles.pauseIcon} aria-hidden="true" />
-          ) : (
-            <span className={styles.playIcon} aria-hidden="true" />
-          )}
-        </button>
-        */}
-
         {CHAPTERS.map((c) => (
           <a
             key={c.id}

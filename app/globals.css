@@ -18,6 +18,15 @@
   --content-padding-x: 1rem;
 }
 
+
+/* Laptop / Desktop en groter */
+@media (min-width: 1024px) {
+  :root {
+    --content-section-padding-y: 5.5rem;
+    --content-padding-x: 2rem;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -40,11 +49,19 @@ body {
   padding: var(--content-section-padding-y) 0;
 }
 
+
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--content-padding-x);
 }
+
+
+
+
+
+
+
 
 .section + .section {
   border-top: 1px solid var(--border);
@@ -60,22 +77,12 @@ body {
   color: var(--muted);
 }
 
-/* Laptop / desktop+ */
-@media (min-width: 1024px) {
-  :root {
-    --content-section-padding-y: 5.5rem;
-    --content-padding-x: 2rem;
-  }
-}
 
-/* Optional: section size modifiers (use as className="section section--compact" etc.) */
-.section--compact {
-  padding: calc(var(--content-section-padding-y) * 0.65) 0;
-}
 
-.section--spacious {
-  padding: calc(var(--content-section-padding-y) * 1.25) 0;
-}
+
+
+
+
 
 #gebruik .highlight {
   margin-top: 2rem;
@@ -123,4 +130,14 @@ body {
 
 .whatsapp-link:hover {
   background: #323232;
+}
+
+
+
+
+
+h1 {
+  font-size: 42px;
+  text-align: center;
+  line-height: 48px;
 }
