@@ -13,28 +13,28 @@ const SEEK_FPS = 25;
 const AUTOPLAY = true;
 const LOOP = true;
 const PAUSE_ON_USER = true;
-const TOTAL_FRAMES = 64;
+const TOTAL_FRAMES = 88;
 
 // ✅ Add hold durations (ms) for specific frames (typically your link frames)
 const HOLDS_MS: Record<number, number> = {
   0: 1200,  // hold 1.2s on frame 0
-  20: 800,  // hold 0.8s on frame 20
-  30: 1500, // hold 1.5s on frame 30
-  40: 900,  // hold 0.9s on frame 40
-  63: 1800, // hold 1.8s on frame 63
+  39: 800,  // hold 0.8s on frame 20
+  46: 1500, // hold 1.5s on frame 30
+  53: 900,  // hold 0.9s on frame 40
+  87: 1800, // hold 1.8s on frame 63
 };
 
 export default function StopMotionScrubber() {
   const frames = Array.from({ length: TOTAL_FRAMES }, (_, i) =>
-    `/svg/e${String(i + 1).padStart(2, "0")}.svg`
+    `/svg/${String(i + 1).padStart(2, "0")}.svg`
   );
 
   const jumpPoints: JumpPoint[] = [
     { label: "Meenemen", index: 0 },
-    { label: "Opbergen", index: 20 },
-    { label: "Ophijsen", index: 30 },
-    { label: "Verplaatsen", index: 40 },
-    { label: "Meenemen", index: 63 },
+    { label: "Opbergen", index: 39 },
+    { label: "Openen", index: 46 },
+    { label: "Ophijsen", index: 53 },
+    { label: "Verplaatsen", index: 87 },
   ];
 
   const [index, setIndex] = useState(0);
@@ -144,7 +144,6 @@ export default function StopMotionScrubber() {
             <span className={styles.playIcon} aria-hidden="true" />
           )}
         </button>
-
         {jumpPoints.map((jp) => (
           <a
             key={jp.index}

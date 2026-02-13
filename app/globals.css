@@ -11,7 +11,7 @@
   --color-y: #1e3a5f;
   --color-z: #064e3b;
 
-  --max-width: 72rem;
+  --max-width: 100vh;
 
   /* Spacing scale (mobile-first). Adjust once here, whole site follows. */
   --content-section-padding-y: 2.5rem;
