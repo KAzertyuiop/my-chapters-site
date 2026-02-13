@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./StopMotionScrubber.module.css";
 
 type JumpPoint = {
@@ -15,18 +15,23 @@ const LOOP = true;
 const PAUSE_ON_USER = true;
 const TOTAL_FRAMES = 88;
 
-// ✅ Add hold durations (ms) for specific frames (typically your link frames)
+// Hold durations (ms) for specific frames (typically your link frames)
 const HOLDS_MS: Record<number, number> = {
-  0: 1200,  // hold 1.2s on frame 0
-  39: 800,  // hold 0.8s on frame 20
-  46: 1500, // hold 1.5s on frame 30
-  53: 900,  // hold 0.9s on frame 40
-  87: 1800, // hold 1.8s on frame 63
+  0: 1200,
+  39: 800,
+  46: 1500,
+  53: 900,
+  87: 1800,
 };
 
 export default function StopMotionScrubber() {
-  const frames = Array.from({ length: TOTAL_FRAMES }, (_, i) =>
-    `/svg/${String(i + 1).padStart(2, "0")}.svg`
+  // ✅ Make frames stable (not recreated every render)
+  const frames = useMemo(
+    () =>
+      Array.from({ length: TOTAL_FRAMES }, (_, i) =>
+        `/svg/${String(i + 1).padStart(2, "0")}.svg`
+      ),
+    []
   );
 
   const jumpPoints: JumpPoint[] = [
@@ -45,6 +50,33 @@ export default function StopMotionScrubber() {
   // Seeking state
   const seekTimerRef = useRef<NodeJS.Timeout | null>(null);
   const seekTargetRef = useRef<number | null>(null);
+
+  // ✅ Preload frames once (warm cache + reduce first-seek choppiness)
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      await Promise.all(
+        frames.map(async (src) => {
+          const img = new Image();
+          img.src = src;
+
+          try {
+            // @ts-ignore
+            if (img.decode) await img.decode();
+          } catch {
+            // ignore decode issues (SVG decode can be inconsistent)
+          }
+
+          if (cancelled) return;
+        })
+      );
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [frames]);
 
   function stopSeek() {
     seekTargetRef.current = null;
@@ -85,12 +117,12 @@ export default function StopMotionScrubber() {
     step();
   }
 
-  // Autoplay logic (✅ now includes holds)
+  // Autoplay logic (includes holds)
   useEffect(() => {
     if (!playing) return;
 
     const baseInterval = 1000 / FPS;
-    const hold = HOLDS_MS[index] ?? 0; // extra pause on specific frames
+    const hold = HOLDS_MS[index] ?? 0;
     const interval = baseInterval + hold;
 
     timerRef.current = setTimeout(() => {
@@ -121,7 +153,7 @@ export default function StopMotionScrubber() {
   }
 
   function togglePlayPause() {
-    stopSeek(); // if user hits play/pause mid-seek, stop seeking
+    stopSeek();
     setPlaying((p) => !p);
   }
 
@@ -144,6 +176,7 @@ export default function StopMotionScrubber() {
             <span className={styles.playIcon} aria-hidden="true" />
           )}
         </button>
+
         {jumpPoints.map((jp) => (
           <a
             key={jp.index}
