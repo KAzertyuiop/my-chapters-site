@@ -9,7 +9,7 @@ export default function MainStart() {
       <section>
         <StopMotionScrubber />
       </section>
-
+      {/*
       <div style={{ maxWidth: '100%', width: '100%' }}>
         <img
           src="/svg/introtest.svg"
@@ -22,6 +22,7 @@ export default function MainStart() {
           style={{ width: '100%', height: 'auto', display: 'block' }}
         />
       </div>
+      */}
     </>
   )
 }

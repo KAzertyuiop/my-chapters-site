@@ -2,30 +2,17 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./StopMotionScrubber.module.css";
-
-type JumpPoint = {
-  label: string;
-  index: number;
-};
+import { CHAPTERS } from "@/lib/scrubberchapters"; // ✅ your new lib file
 
 const FPS = 8;
 const SEEK_FPS = 25;
 const AUTOPLAY = true;
-const LOOP = true;
+const LOOP = true; // ping-pong keeps going
 const PAUSE_ON_USER = true;
 const TOTAL_FRAMES = 88;
 
-// Hold durations (ms) for specific frames (typically your link frames)
-const HOLDS_MS: Record<number, number> = {
-  0: 1200,
-  39: 800,
-  46: 1500,
-  53: 900,
-  87: 1800,
-};
-
 export default function StopMotionScrubber() {
-  // ✅ Make frames stable (not recreated every render)
+  // ✅ Stable frames (not recreated every render)
   const frames = useMemo(
     () =>
       Array.from({ length: TOTAL_FRAMES }, (_, i) =>
@@ -34,24 +21,31 @@ export default function StopMotionScrubber() {
     []
   );
 
-  const jumpPoints: JumpPoint[] = [
-    { label: "Meenemen", index: 0 },
-    { label: "Opbergen", index: 39 },
-    { label: "Openen", index: 46 },
-    { label: "Ophijsen", index: 53 },
-    { label: "Verplaatsen", index: 87 },
-  ];
+  // ✅ Holds derived from CHAPTERS (no separate HOLDS_MS)
+  const holdsMs = useMemo(() => {
+    const map: Record<number, number> = {};
+    for (const c of CHAPTERS) {
+      if (typeof c.holdMs === "number" && c.holdMs > 0) map[c.index] = c.holdMs;
+    }
+    return map;
+  }, []);
 
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(AUTOPLAY);
 
+  // Selected chapter link separate from index
+  const [activeLinkIndex, setActiveLinkIndex] = useState<number | null>(null);
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Ping-pong direction: +1 (to the right) or -1 (to the left)
+  const dirRef = useRef<1 | -1>(1);
 
   // Seeking state
   const seekTimerRef = useRef<NodeJS.Timeout | null>(null);
   const seekTargetRef = useRef<number | null>(null);
 
-  // ✅ Preload frames once (warm cache + reduce first-seek choppiness)
+  // ✅ Preload frames once
   useEffect(() => {
     let cancelled = false;
 
@@ -60,14 +54,12 @@ export default function StopMotionScrubber() {
         frames.map(async (src) => {
           const img = new Image();
           img.src = src;
-
           try {
             // @ts-ignore
             if (img.decode) await img.decode();
           } catch {
             // ignore decode issues (SVG decode can be inconsistent)
           }
-
           if (cancelled) return;
         })
       );
@@ -85,8 +77,9 @@ export default function StopMotionScrubber() {
   }
 
   function startSeek(target: number) {
-    // Pause autoplay while seeking (and reflect that in the button)
+    // Clicking a chapter pauses autoplay (and selects the link)
     setPlaying(false);
+    setActiveLinkIndex(target);
 
     stopSeek();
 
@@ -117,27 +110,50 @@ export default function StopMotionScrubber() {
     step();
   }
 
-  // Autoplay logic (includes holds)
+  // Which chapter card to show:
+  // 1) if user explicitly selected a link: show that chapter
+  // 2) else: if we're on a hold frame: show that chapter
+  const cardChapter = useMemo(() => {
+    if (activeLinkIndex !== null) {
+      return CHAPTERS.find((c) => c.index === activeLinkIndex) ?? null;
+    }
+    const hold = holdsMs[index] ?? 0;
+    if (hold > 0) return CHAPTERS.find((c) => c.index === index) ?? null;
+    return null;
+  }, [activeLinkIndex, holdsMs, index]);
+
+  // Autoplay logic: ping-pong (left↔right), includes holds
   useEffect(() => {
     if (!playing) return;
 
     const baseInterval = 1000 / FPS;
-    const hold = HOLDS_MS[index] ?? 0;
+    const hold = holdsMs[index] ?? 0;
     const interval = baseInterval + hold;
 
     timerRef.current = setTimeout(() => {
       setIndex((prev) => {
-        if (prev >= frames.length - 1) {
-          return LOOP ? 0 : prev;
+        const last = frames.length - 1;
+        let next = prev + dirRef.current;
+
+        // Bounce at the ends (ping-pong)
+        if (next > last) {
+          if (!LOOP) return prev;
+          dirRef.current = -1;
+          next = prev - 1;
+        } else if (next < 0) {
+          if (!LOOP) return prev;
+          dirRef.current = 1;
+          next = prev + 1;
         }
-        return prev + 1;
+
+        return next;
       });
     }, interval);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [index, playing, frames.length]);
+  }, [index, playing, frames.length, holdsMs]);
 
   // Cleanup seek timer on unmount
   useEffect(() => {
@@ -148,12 +164,15 @@ export default function StopMotionScrubber() {
 
   function handleUserSetFrame(newIndex: number) {
     stopSeek();
+    setActiveLinkIndex(null); // scrubbing = no selected chapter
     if (PAUSE_ON_USER) setPlaying(false);
     setIndex(newIndex);
   }
 
+  // If you re-enable play/pause later
   function togglePlayPause() {
     stopSeek();
+    setActiveLinkIndex(null);
     setPlaying((p) => !p);
   }
 
@@ -163,7 +182,25 @@ export default function StopMotionScrubber() {
         <img src={frames[index]} alt="" className={styles.frame} />
       </div>
 
+      {/* Pause-card appears during holds OR when a chapter link is selected */}
+      {cardChapter && (
+        <div className={styles.pauseCardWrapper}>
+            <div className={styles.pauseCard}>
+            <div className={styles.pauseText}>
+                {/* <div className={styles.pauseTitle}>{cardChapter.title}</div> */}
+                <div className={styles.pauseBody}>{cardChapter.body}</div>
+            </div>
+
+            <button type="button" className={styles.pauseCta} aria-label="Meer info">
+                +
+            </button>
+            </div>
+        </div>
+      )}
+
       <nav className={styles.labels}>
+        {/* play/pause button hidden for now? keep it commented or hide with CSS */}
+        {/*
         <button
           type="button"
           className={styles.playPause}
@@ -176,18 +213,28 @@ export default function StopMotionScrubber() {
             <span className={styles.playIcon} aria-hidden="true" />
           )}
         </button>
+        */}
 
-        {jumpPoints.map((jp) => (
+        {CHAPTERS.map((c) => (
           <a
-            key={jp.index}
+            key={c.id}
             href="#"
-            data-active={index === jp.index}
+            data-active={activeLinkIndex === c.index}
             onClick={(e) => {
               e.preventDefault();
-              startSeek(jp.index);
+
+              // second click on active link = deselect + resume autoplay
+              if (activeLinkIndex === c.index) {
+                stopSeek();
+                setActiveLinkIndex(null);
+                setPlaying(true);
+                return;
+              }
+
+              startSeek(c.index);
             }}
           >
-            {jp.label}
+            {c.label}
           </a>
         ))}
       </nav>
