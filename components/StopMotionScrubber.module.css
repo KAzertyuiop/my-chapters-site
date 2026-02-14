@@ -1,25 +1,29 @@
 .player {
-  position: relative;
-  background-color: #ffffff;
-
-    display: flex;
+    /*background-color: blue;*/
+    width: 100%;
+    height: 100%;
+    display: flex; /* Belangrijk om hoogte te geven aan frameWrap en frame */
     flex-direction: column;
-    justify-content: flex-end;
     align-items: center;
-
-    height: 600px;
-
 }
-
 .frameWrap {
-  width: 100%;
+    width: 100%;
+    flex: 1;                 /* Neemt resterende hoogte binnen player */
+    min-height: 0;           /* BELANGRIJK in flex layouts */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*background-color: deeppink;*/
+}
+.frame {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    /*background-color: green;*/
 }
 
-.frame {
-  width: 100%;
-  object-fit: contain;
-  display: block;
-}
+
 
 /* labels */
 .labels {
@@ -34,22 +38,29 @@
 }
 
 .labels a {
-padding: 12px 0;
+    padding: 12px 0;
     color: #000;
     text-decoration: none;
     font-size: 14px;
     line-height: 1.2;
     white-space: nowrap;
     opacity: 1;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
 }
+
+
 .labels a:hover {
-  color: #ff0808;
+    text-decoration: none;
 }
 
 .labels a[data-active="true"] {
-    color: #000000;
+    color: var(--zwart);
+    text-decoration: none;
     opacity: 1;
-    font-weight: 600;   
+    font-weight: 600;
+    border-bottom: 0px solid currentColor;
+    padding-bottom: 2px;
 }
 
 /* range reset */
@@ -66,11 +77,11 @@ padding: 12px 0;
 .range::-webkit-slider-runnable-track {
   height: 2px;
   margin: 30px 30px;
-  background: #000;
+  background: var(--zwart);
 }
 .range::-moz-range-track {
   height: 2px;
-  background: #000;
+  background: var(--zwart);
 }
 
 /* thumb */
@@ -78,14 +89,14 @@ padding: 12px 0;
   -webkit-appearance: none;
   width: 6px;
   height: 62px;
-  background: #000000;
+  background: var(--zwart);
   border-radius: 2px;
   margin-top: -30px;
 }
 .range::-moz-range-thumb {
   width: 6px;
   height: 62px;
-  background: #000;
+  background: var(--zwart);
   border-radius: 2px;
   margin-top: -30px;
 }
@@ -93,7 +104,7 @@ padding: 12px 0;
 
 
 
-
+/*
 .playPause {
   flex: 0 0 auto;
   width: 44px;
@@ -120,15 +131,17 @@ padding: 12px 0;
   outline: 2px solid #000;
   outline-offset: 3px;
 }
+*/
 
 /* Icons (pure CSS) */
+/*
 .playIcon {
   width: 0;
   height: 0;
   border-left: 14px solid #111;
   border-top: 9px solid transparent;
   border-bottom: 9px solid transparent;
-  margin-left: 2px; /* centers triangle visually */
+  margin-left: 2px;
 }
 
 .pauseIcon {
@@ -155,7 +168,7 @@ padding: 12px 0;
 .pauseIcon::after {
   right: 0;
 }
-
+*/
 
 /* ==================================================
 Pause Card (black banner)
@@ -176,7 +189,7 @@ Pause Card (black banner)
   max-width: 100%;
 
 
-  background: #000000d2;
+  background: var(--zwart);
   color: #fff;
   border-radius: 4px;
   padding: 10px 10px 10px 16px;

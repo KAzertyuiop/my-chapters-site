@@ -10,6 +10,7 @@
   --color-x: #3f1d1d;
   --color-y: #1e3a5f;
   --color-z: #064e3b;
+  --zwart: #000000;
 
   --max-width: 2000px;
 
@@ -22,7 +23,7 @@
 /* Laptop / Desktop en groter */
 @media (min-width: 1024px) {
   :root {
-    --content-section-padding-y: 5.5rem;
+    --content-section-padding-y: 1rem; /* ongebriuk */
     --content-padding-x: 2rem;
   }
 }
@@ -40,8 +41,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.6;
 }
 
@@ -55,6 +55,10 @@ body {
   margin: 0 auto;
   padding: 0 var(--content-padding-x);
 }
+
+
+
+
 
 
 
@@ -135,9 +139,3 @@ body {
 
 
 
-
-h1 {
-  font-size: 42px;
-  text-align: center;
-  line-height: 48px;
-}

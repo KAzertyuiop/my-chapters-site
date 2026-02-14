@@ -1,3 +1,35 @@
-h1 {
-  font-size: 42px;
+.opener {
+    min-height: 100vh;
+    min-height: 100svh;  
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0 10px 0;
+    /*background-color: yellow;*/
+}
+
+.scrubberSizing {
+  margin-top: auto;
+  width: 100%;
+
+  /* kies hoeveel ruimte de scrubber (incl image) mag krijgen */
+  height: clamp(500px, 70svh, 2000px); /* clamp(MIN, IDEALE_WAARDE, MAX) */
+}
+
+
+.promise {
+    font-size: 28px;
+    text-align: center;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    margin: 0;
+    padding: 0.25em 0;
+}
+.promise span {
+    display: block;
+}
+.promise span:last-child {
+    margin-top: -0.02em;
 }

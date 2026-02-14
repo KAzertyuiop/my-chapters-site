@@ -197,7 +197,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
       <WhatsAppLink activeSectionId={activeSectionId} />
 
       <main>
-        <section id="intro" className="section">
+        <section id="intro">
           <MainStart />
         </section>
 
