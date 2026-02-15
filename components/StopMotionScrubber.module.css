@@ -34,7 +34,8 @@
     justify-content: space-between;
     align-items: center;
     user-select: none;
-    margin-top: 100px;
+    margin-top: 60px;
+    margin-bottom: 20px;
 }
 
 .labels a {
@@ -71,6 +72,7 @@
   background: transparent;
   cursor: pointer;
   touch-action: pan-x;
+  margin-bottom: 20px;
 }
 
 /* track */
@@ -176,7 +178,7 @@ Pause Card (black banner)
 
 .pauseCardWrapper {
   position: absolute;
-  bottom: 100px;
+  bottom: 120px;
   left: 0;
   right: 0;
   display: flex;
@@ -185,7 +187,7 @@ Pause Card (black banner)
 }
 
 .pauseCard {
-  width: 640px;
+  width: 560px;
   max-width: 100%;
 
 
@@ -193,7 +195,7 @@ Pause Card (black banner)
   color: #fff;
   border-radius: 4px;
   padding: 10px 10px 10px 16px;
-  margin: 24px 00px;
+  margin: 20px 10px;
 
   display: flex;
   align-items: center;

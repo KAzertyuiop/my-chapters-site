@@ -194,7 +194,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
   return (
     <>
       <GlobalNav activeSectionId={activeSectionId} />
-      <WhatsAppLink activeSectionId={activeSectionId} />
+      {/*<WhatsAppLink activeSectionId={activeSectionId} />*/}
 
       <main>
         <section id="intro">

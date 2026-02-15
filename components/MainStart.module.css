@@ -5,7 +5,6 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0 10px 0;
     /*background-color: yellow;*/
 }
 
@@ -24,7 +23,7 @@
     line-height: 1.05;
     letter-spacing: -0.02em;
     font-weight: 400;
-    margin: 0;
+    margin-top: 40px;
     padding: 0.25em 0;
 }
 .promise span {
