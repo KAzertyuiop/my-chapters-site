@@ -1,6 +1,7 @@
 .scrubber {
     width: 100%;
     max-width: 1200px;
+    min-width: 380px;
     height: 100%;
     display: flex; /* Belangrijk om hoogte te geven aan frameWrap en frame */
     flex-direction: column;
@@ -9,7 +10,22 @@
     margin-left: auto;
     margin-right: auto;
     /*background-color: blue;*/
+
+    --ruimte-link-illustratie: 50px;
+    --ruimte-link-annotatie: 130px;
+    --ruimte-bovenonder-slider: 16px;
 }
+
+/* Laptop / Desktop en groter */
+@media (min-width: 1024px) {
+  .scrubber {
+    --ruimte-link-illustratie: 80px;
+    --ruimte-link-annotatie: 180px;
+    --ruimte-bovenonder-slider: 36px;
+  }
+}
+
+
 
 
 /* svgs */
@@ -34,14 +50,15 @@
 /* labels */
 .labels {
     width: 100%;
+    max-width: 460px;
     padding: 0 10px; 
-    margin-top: 50px; /* Ruimte voor de pause-annotaties */ 
+    margin-top: var(--ruimte-link-illustratie); /* Ruimte voor de pause-annotaties */ 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     user-select: none;
-
+    /*background-color: tomato;*/
 }
 .labels a {
     padding: 12px 0;
@@ -55,14 +72,14 @@
     padding-bottom: 2px;
 }
 .labels a:hover {
-    text-decoration: none;
+    transform: translateY(-1px);
 }
 .labels a[data-active="true"] {
     color: var(--zwart);
     text-decoration: none;
     opacity: 1;
     font-weight: 600;
-    border-bottom: 0px solid currentColor;
+    border-color: transparent;
     padding-bottom: 2px;
 }
 
@@ -72,8 +89,10 @@
   position: relative;
   width: 100%;
   height: 62px; /* same as your thumb height */
-  margin: 16px 0;
+  margin: var(--ruimte-bovenonder-slider) 0;
 }
+
+
 
 /* the real input: interactive, but no visible track */
 .range{
@@ -85,6 +104,7 @@
   -webkit-appearance: none;
   appearance: none;
   touch-action: pan-x;
+  cursor: pointer;
 }
 
 /* hide native track entirely */
@@ -114,7 +134,37 @@
   border-radius: 0;
   box-shadow: none !important;
   margin-top: 0; /* track is 62px now */
+  cursor: grab;
 }
+.range::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+/* Firefox thumb */
+.range::-moz-range-thumb {
+  width: 44px;
+  height: 62px;
+
+  background: linear-gradient(
+    to right,
+    transparent calc(50% - 3px),
+    var(--zwart) calc(50% - 3px),
+    var(--zwart) calc(50% + 3px),
+    transparent calc(50% + 3px)
+  );
+
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+
+  cursor: grab;
+}
+
+/* Firefox active state */
+.range::-moz-range-thumb:active {
+  cursor: grabbing;
+}
+
+
 
 /* the visible line */
 .rangeLine{
@@ -157,7 +207,7 @@
 
 .pauseCardWrapper {
   position: absolute;
-  bottom: 130px;
+  bottom: var(--ruimte-link-annotatie);
   left: 0;
   right: 0;
   display: flex;
@@ -166,7 +216,7 @@
 }
 
 .pauseCard {
-  width: 564px;
+  max-width: 320px;
 
   background: var(--zwart);
   color: #fff;

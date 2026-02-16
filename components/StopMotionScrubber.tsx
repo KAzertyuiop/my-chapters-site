@@ -10,6 +10,7 @@ const AUTOPLAY = true;
 const LOOP = true; // ping-pong keeps going
 const PAUSE_ON_USER = true;
 const TOTAL_FRAMES = 88;
+const START_FRAME = 24; // 0-based index (so 24 = 25th SVG)
 
 // Delay before showing the pause card (prevents flashes)
 const CARD_SHOW_DELAY_MS = 200;
@@ -31,7 +32,7 @@ export default function StopMotionScrubber() {
     return map;
   }, []);
 
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(START_FRAME);
   const [playing, setPlaying] = useState(AUTOPLAY);
   const [activeLinkIndex, setActiveLinkIndex] = useState<number | null>(null);
 
@@ -44,6 +45,10 @@ export default function StopMotionScrubber() {
   // ✅ Pause-card visibility state (delayed)
   const [cardVisible, setCardVisible] = useState(false);
   const cardDelayRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    dirRef.current = 1; // go right on load
+  }, []);
 
   // Preload frames once
   useEffect(() => {

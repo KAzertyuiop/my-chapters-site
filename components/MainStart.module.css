@@ -1,11 +1,22 @@
 .opener {
     min-height: 100vh;
     min-height: 100svh;  
+    min-width: 380px;
     display: flex;
     flex-direction: column;
     align-items: center;
     /*background-color: yellow;*/
+
+    --titel-font: 28px;
 }
+/* Laptop / Desktop en groter */
+@media (min-width: 1024px) {
+  .opener {
+    --titel-font: 40px;
+  }
+}
+
+
 
 .promise {
     flex: 1; /* Belangrijk om bovenste deel geel 'de rest' te laten innenmen na scrubber blauw */ 
@@ -13,7 +24,7 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    font-size: 28px;
+    font-size: var(--titel-font);
     text-align: center;
     line-height: 1.05;
     letter-spacing: -0.02em;
@@ -25,9 +36,6 @@
 }
 .promise span:last-child {
     margin-top: -0.02em;
-}
-.promise h1 {
-  margin: 0;
 }
 
 .scrubberSizing {
