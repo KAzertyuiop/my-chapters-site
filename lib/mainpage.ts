@@ -7,7 +7,7 @@ export const mainpagetexts = {
   },
   description: {
     en: 'Effortless rooftop tent handling.',
-    nl: 'Moeiteloos daktenten hanteren.',
+    nl: 'Hanteer je daktent met gemak.',
   },
   og: {
     image: '/og/main2.png',

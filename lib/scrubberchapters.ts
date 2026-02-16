@@ -9,12 +9,12 @@ export type Chapter = {
 
 export const CHAPTERS: Chapter[] = [
   {
-    id: "meenemen",
-    label: "Meepakken",
+    id: "meevoeren",
+    label: "Meevoeren",
     index: 0,
     holdMs: 1200,
-    title: "Meepakken",
-    body: "Korte uitleg over meenemen…",
+    title: "Meevoeren",
+    body: "Demonteer tot een plat pakket (IKEA style) dat in elk* koffer past",
   },
   {
     id: "opbergen",
@@ -30,7 +30,7 @@ export const CHAPTERS: Chapter[] = [
     index: 46,
     holdMs: 1500,
     title: "Openen",
-    body: "Uitleg over openen…",
+    body: "Autovrij laten drogen, of je tent ook gebruiken zonder auto",
   },
   {
     id: "ophijsen",
@@ -38,7 +38,7 @@ export const CHAPTERS: Chapter[] = [
     index: 53,
     holdMs: 900,
     title: "Ophijsen",
-    body: "Uitleg over ophijsen…",
+    body: "Voorzichtig tot op ooghoogte, met een heftboom van 4-op-1",
   },
   {
     id: "verplaatsen",
@@ -46,6 +46,6 @@ export const CHAPTERS: Chapter[] = [
     index: 87,
     holdMs: 1800,
     title: "Verplaatsen",
-    body: "Uitleg over verplaatsen…",
+    body: "Rol zonder moeite door smalle punten zoals deuren en gangen"
   },
 ];
