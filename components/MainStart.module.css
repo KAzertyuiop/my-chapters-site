@@ -3,27 +3,21 @@
     min-height: 100svh;  
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     /*background-color: yellow;*/
 }
 
-.scrubberSizing {
-  margin-top: auto;
-  width: 100%;
-
-  /* kies hoeveel ruimte de scrubber (incl image) mag krijgen */
-  height: clamp(500px, 70svh, 2000px); /* clamp(MIN, IDEALE_WAARDE, MAX) */
-}
-
-
 .promise {
+    flex: 1; /* Belangrijk om bovenste deel geel 'de rest' te laten innenmen na scrubber blauw */ 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     font-size: 28px;
     text-align: center;
     line-height: 1.05;
     letter-spacing: -0.02em;
     font-weight: 400;
-    margin-top: 40px;
     padding: 0.25em 0;
 }
 .promise span {
@@ -31,4 +25,15 @@
 }
 .promise span:last-child {
     margin-top: -0.02em;
+}
+.promise h1 {
+  margin: 0;
+}
+
+.scrubberSizing {
+    margin-top: auto;
+    width: 100%;
+    /* kies hoeveel ruimte de scrubber (incl image) mag krijgen */
+    height: clamp(500px, 80svh, 2000px); /* clamp(MIN, IDEALE_WAARDE, MAX) */
+    /*background-color: cyan;*/
 }

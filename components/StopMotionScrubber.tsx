@@ -193,7 +193,7 @@ export default function StopMotionScrubber() {
   }
 
   return (
-    <div className={styles.player}>
+    <div className={styles.scrubber}>
       <div className={styles.frameWrap}>
         <img src={frames[index]} alt="" className={styles.frame} />
       </div>
@@ -221,7 +221,10 @@ export default function StopMotionScrubber() {
           <a
             key={c.id}
             href="#"
-            data-active={activeLinkIndex === c.index}
+            data-active={
+                activeLinkIndex === c.index ||
+                (playing && activeLinkIndex === null && (holdsMs[index] ?? 0) > 0 && c.index === index)
+            }
             onClick={(e) => {
               e.preventDefault();
 
@@ -241,15 +244,19 @@ export default function StopMotionScrubber() {
         ))}
       </nav>
 
-      <input
-        type="range"
-        min={0}
-        max={frames.length - 1}
-        step={1}
-        value={index}
-        onChange={(e) => handleUserSetFrame(Number(e.target.value))}
-        className={styles.range}
-      />
+
+        <div className={styles.rangeWrap}>
+        <input
+            type="range"
+            min={0}
+            max={frames.length - 1}
+            step={1}
+            value={index}
+            onChange={(e) => handleUserSetFrame(Number(e.target.value))}
+            className={styles.range}
+        />
+        <div className={styles.rangeLine} aria-hidden="true" />
+        </div>
     </div>
   );
 }
