@@ -12,7 +12,7 @@
 /* Laptop / Desktop en groter */
 @media (min-width: 1024px) {
   .opener {
-    --titel-font: 40px;
+    --titel-font: 38px;
   }
 }
 

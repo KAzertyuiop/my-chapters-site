@@ -4,15 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./StopMotionScrubber.module.css";
 import { CHAPTERS } from "@/lib/scrubberchapters";
 
-const FPS = 8;
-const SEEK_FPS = 25;
+const FPS = 6;
+const SEEK_FPS = 18;
 const AUTOPLAY = true;
 const LOOP = true; // ping-pong keeps going
 const PAUSE_ON_USER = true;
 const TOTAL_FRAMES = 88;
-const START_FRAME = 24; // 0-based index (so 24 = 25th SVG)
+const START_FRAME = 24; // 0-based
 
-// Delay before showing the pause card (prevents flashes)
 const CARD_SHOW_DELAY_MS = 200;
 
 export default function StopMotionScrubber() {
@@ -33,7 +32,11 @@ export default function StopMotionScrubber() {
   }, []);
 
   const [index, setIndex] = useState(START_FRAME);
-  const [playing, setPlaying] = useState(AUTOPLAY);
+
+  // ⬇️ autoplay gated by preload readiness
+  const [ready, setReady] = useState(false);
+  const [playing, setPlaying] = useState(false);
+
   const [activeLinkIndex, setActiveLinkIndex] = useState<number | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -42,30 +45,64 @@ export default function StopMotionScrubber() {
   const seekTimerRef = useRef<NodeJS.Timeout | null>(null);
   const seekTargetRef = useRef<number | null>(null);
 
-  // ✅ Pause-card visibility state (delayed)
   const [cardVisible, setCardVisible] = useState(false);
   const cardDelayRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Keep Image objects alive (helps some browsers stay “warm”)
+  const preloadedImagesRef = useRef<HTMLImageElement[]>([]);
 
   useEffect(() => {
     dirRef.current = 1; // go right on load
   }, []);
 
-  // Preload frames once
+  // ✅ Preload frames once, then enable autoplay
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
-      await Promise.all(
-        frames.map(async (src) => {
+      try {
+        // 1) Warm HTTP cache (more reliable for SVG than decode alone)
+        await Promise.all(
+          frames.map(async (src) => {
+            try {
+              await fetch(src, { cache: "force-cache" });
+            } catch {}
+          })
+        );
+
+        if (cancelled) return;
+
+        // 2) Warm image decode (best effort)
+        const imgs = frames.map((src) => {
           const img = new Image();
           img.src = src;
-          try {
-            // @ts-ignore
-            if (img.decode) await img.decode();
-          } catch {}
-          if (cancelled) return;
-        })
-      );
+          // @ts-ignore
+          img.decoding = "async";
+          return img;
+        });
+
+        preloadedImagesRef.current = imgs;
+
+        await Promise.all(
+          imgs.map(async (img) => {
+            try {
+              // @ts-ignore
+              if (img.decode) await img.decode();
+            } catch {}
+          })
+        );
+
+        if (cancelled) return;
+
+        setReady(true);
+        if (AUTOPLAY) setPlaying(true);
+      } catch {
+        // even if preload fails, don't deadlock the UI
+        if (!cancelled) {
+          setReady(true);
+          if (AUTOPLAY) setPlaying(true);
+        }
+      }
     })();
 
     return () => {
@@ -80,6 +117,7 @@ export default function StopMotionScrubber() {
   }
 
   function startSeek(target: number) {
+    // seeking should feel smooth only after preload; otherwise it may stutter
     setPlaying(false);
     setActiveLinkIndex(target);
 
@@ -112,7 +150,6 @@ export default function StopMotionScrubber() {
     step();
   }
 
-  // Which chapter card to show:
   const cardChapter = useMemo(() => {
     if (activeLinkIndex !== null) {
       return CHAPTERS.find((c) => c.index === activeLinkIndex) ?? null;
@@ -122,18 +159,14 @@ export default function StopMotionScrubber() {
     return null;
   }, [activeLinkIndex, holdsMs, index]);
 
-  // ✅ Delay show/hide to prevent flashes
   useEffect(() => {
-    // clear any pending timer
     if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
 
     if (!cardChapter) {
-      // hide immediately when there is no chapter
       setCardVisible(false);
       return;
     }
 
-    // show after a short delay (prevents brief flashes)
     setCardVisible(false);
     cardDelayRef.current = setTimeout(() => {
       setCardVisible(true);
@@ -144,8 +177,9 @@ export default function StopMotionScrubber() {
     };
   }, [cardChapter]);
 
-  // Autoplay logic: ping-pong (left↔right), includes holds
+  // Autoplay logic (only if ready)
   useEffect(() => {
+    if (!ready) return;
     if (!playing) return;
 
     const baseInterval = 1000 / FPS;
@@ -174,13 +208,14 @@ export default function StopMotionScrubber() {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [index, playing, frames.length, holdsMs]);
+  }, [ready, index, playing, frames.length, holdsMs]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopSeek();
       if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
 
@@ -227,8 +262,11 @@ export default function StopMotionScrubber() {
             key={c.id}
             href="#"
             data-active={
-                activeLinkIndex === c.index ||
-                (playing && activeLinkIndex === null && (holdsMs[index] ?? 0) > 0 && c.index === index)
+              activeLinkIndex === c.index ||
+              (playing &&
+                activeLinkIndex === null &&
+                (holdsMs[index] ?? 0) > 0 &&
+                c.index === index)
             }
             onClick={(e) => {
               e.preventDefault();
@@ -249,19 +287,22 @@ export default function StopMotionScrubber() {
         ))}
       </nav>
 
-
-        <div className={styles.rangeWrap}>
+      <div className={styles.rangeWrap}>
         <input
-            type="range"
-            min={0}
-            max={frames.length - 1}
-            step={1}
-            value={index}
-            onChange={(e) => handleUserSetFrame(Number(e.target.value))}
-            className={styles.range}
+          type="range"
+          min={0}
+          max={frames.length - 1}
+          step={1}
+          value={index}
+          onChange={(e) => handleUserSetFrame(Number(e.target.value))}
+          className={styles.range}
+          aria-label="Scrub timeline"
         />
         <div className={styles.rangeLine} aria-hidden="true" />
-        </div>
+      </div>
+
+      {/* Optional: tiny debug to see readiness (remove later) */}
+      {/* <div style={{ fontSize: 12, opacity: 0.6 }}>{ready ? "ready" : "loading…"}</div> */}
     </div>
   );
 }
