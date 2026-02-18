@@ -10,6 +10,6 @@ export const mainpagetexts = {
     nl: 'Hanteer je daktent met gemak.',
   },
   og: {
-    image: '/og/main2.png',
+    image: '/og/main3.png',
   }
 }

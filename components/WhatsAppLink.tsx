@@ -7,14 +7,11 @@ const PHONE = '32474403450'
 
 type WhatsAppLinkProps = {
   activeSectionId: string | null
+  isVisible: boolean
 }
 
-export default function WhatsAppLink({
-  activeSectionId,
-}: WhatsAppLinkProps) {
+export default function WhatsAppLink({ activeSectionId, isVisible }: WhatsAppLinkProps) {
   const href = `https://wa.me/${PHONE}`
-  
-console.log('WhatsApp active section:', activeSectionId)
 
   const handleClick = () => {
     posthog.capture('whatsapp_contact_click', {
@@ -28,7 +25,7 @@ console.log('WhatsApp active section:', activeSectionId)
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={styles.whatsapp}
+      className={`${styles.whatsapp} ${isVisible ? styles.visible : styles.hidden}`}
       onClick={handleClick}
       aria-label="WhatsApp bubble"
     >

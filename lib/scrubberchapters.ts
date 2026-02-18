@@ -14,7 +14,7 @@ export const CHAPTERS: Chapter[] = [
     index: 0,
     holdMs: 3000,
     title: "Meevoeren",
-    body: "Demonteer tot een plat pakket dat in elk autokoffer past, IKEA style.",
+    body: "Demonteer tot een plat pakket, IKEA style. Past in elk autokoffer.",
   },
   {
     id: "opbergen",
@@ -22,7 +22,7 @@ export const CHAPTERS: Chapter[] = [
     index: 39,
     holdMs: 3000,
     title: "Opbergen",
-    body: "Horizontale opslag met een minimale voetafdruk, en nog steeds verplaatsbaar.",
+    body: "Horizontale opslag met een minimale voetafdruk. Nog steeds verplaatsbaar.",
   },
   {
     id: "openen",
@@ -38,7 +38,7 @@ export const CHAPTERS: Chapter[] = [
     index: 53,
     holdMs: 3000,
     title: "Ophijsen",
-    body: "Rustig hijsen als een kraan, tot op ooghoogte, met 75 kg die voelt als 25.",
+    body: "Rustig hijsen tot ooghoogte, als een kraan. 75 kg voelt als 25.",
   },
   {
     id: "verplaatsen",
@@ -46,6 +46,6 @@ export const CHAPTERS: Chapter[] = [
     index: 87,
     holdMs: 3000,
     title: "Verplaatsen",
-    body: "Rol moeiteloos door smalle punten, zoals deuren, gangen, stoep of steeg."
+    body: "Rol door smalle punten, zoals deuren, gangen, stoep of steeg."
   },
 ];

@@ -191,10 +191,12 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
     }
   }, [activeSectionId])
 
+  const whatsappVisible = !!activeSectionId && activeSectionId !== 'intro'
+
   return (
     <>
       <GlobalNav activeSectionId={activeSectionId} />
-      {/*<WhatsAppLink activeSectionId={activeSectionId} />*/}
+      <WhatsAppLink activeSectionId={activeSectionId} isVisible={whatsappVisible} />
 
       <main>
         <section id="intro">
