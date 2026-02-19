@@ -17,6 +17,9 @@
     --hoogte-slider: 62px;
     --dikte-slider-line: 2px;
     --breedte-slider-thumb: 80px;
+    --breedte-annotatie: 320px;
+    --lettergrootte-annotatie: 12px;
+    --lettergrootte-labels: 14px;
 }
 
 /* Laptop / Desktop en groter */
@@ -25,6 +28,9 @@
     --ruimte-link-illustratie: 80px;
     --ruimte-link-annotatie: 180px;
     --ruimte-bovenonder-slider: 36px;
+    --breedte-annotatie: auto;
+    --lettergrootte-annotatie: 16px;
+    --lettergrootte-labels: 20px;
   }
 }
 
@@ -70,7 +76,7 @@
     padding: 12px 0;
     color: #000;
     text-decoration: none;
-    font-size: 14px;
+    font-size: var(--lettergrootte-labels);
     line-height: 1.2;
     white-space: nowrap;
     opacity: 1;
@@ -78,7 +84,8 @@
     padding-bottom: 2px;
 }
 .labels a:hover {
-    transform: translateY(-1px);
+    /*transform: translateY(-1px);*/
+    border-bottom: 1px solid transparent;
 }
 .labels a[data-active="true"] {
     color: var(--zwart);
@@ -219,7 +226,7 @@
 }
 
 .pauseCard {
-  width: 320px;
+  width: var(--breedte-annotatie);
 
   background: var(--zwart);
   color: #fff;
@@ -265,7 +272,7 @@
 }
 
 .pauseBody {
-  font-size: 12px;
+  font-size: var(--lettergrootte-annotatie);
   line-height: 1.4;
   font-weight: 600;
 }

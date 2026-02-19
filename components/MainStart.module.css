@@ -30,8 +30,9 @@
     text-align: center;
     line-height: 1.05;
     letter-spacing: -0.02em;
-    font-weight: 600;
+    font-weight: 300;
     padding: 0.25em 0;
+    margin-bottom: 2vh;
 }
 .promise span {
     display: block;

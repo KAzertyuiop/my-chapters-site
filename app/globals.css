@@ -48,8 +48,6 @@ body {
 .section {
   padding: var(--content-section-padding-y) 0;
 }
-
-
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -57,19 +55,11 @@ body {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 .section + .section {
   border-top: 1px solid var(--border);
 }
+
+
 
 .section h2 {
   font-size: 2rem;
@@ -86,14 +76,10 @@ body {
 
 
 
-
-
-#gebruik .highlight {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: #f5f7ff;
-  border-left: 4px solid var(--accent);
-  font-weight: 500;
+#over {
+  background: #000;
+  color: #FFF;
+  height: 200vh;
 }
 
 #gebruik {
@@ -111,9 +97,7 @@ body {
 #opslag {
   background: var(--bg-alt, white);
 }
-#over {
-  background: var(--bg-alt, white);
-}
+
 #overzicht {
   background: var(--bg, white);
 }

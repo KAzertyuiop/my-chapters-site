@@ -22,7 +22,7 @@ export const CHAPTERS: Chapter[] = [
     index: 39,
     holdMs: 3000,
     title: "Opbergen",
-    body: "Horizontale opslag met een minimale voetafdruk. Nog steeds verplaatsbaar.",
+    body: "Horizontaal overwinteren met kleine voetafdruk. Blijvend verplaatsbaar.",
   },
   {
     id: "openen",
@@ -30,7 +30,7 @@ export const CHAPTERS: Chapter[] = [
     index: 46,
     holdMs: 3000,
     title: "Openen",
-    body: "Autovrij laten drogen. Of benut je tent zonder auto, in de tuin of op reis.",
+    body: "Autovrij laten drogen. Of benut je tent zonder auto. In de tuin of op reis.",
   },
   {
     id: "ophijsen",
@@ -38,7 +38,7 @@ export const CHAPTERS: Chapter[] = [
     index: 53,
     holdMs: 3000,
     title: "Ophijsen",
-    body: "Rustig hijsen tot ooghoogte, als een kraan. 75 kg voelt als 25.",
+    body: "Voorzichtig hijsen tot ooghoogte. Als een kraan. 75 kg voelt als 25.",
   },
   {
     id: "verplaatsen",
@@ -46,6 +46,6 @@ export const CHAPTERS: Chapter[] = [
     index: 87,
     holdMs: 3000,
     title: "Verplaatsen",
-    body: "Rol door smalle punten, zoals deuren, gangen, stoep of steeg."
+    body: "Rol doorheen smalle punten. Deuren, gangen, stoep, steeg..."
   },
 ];

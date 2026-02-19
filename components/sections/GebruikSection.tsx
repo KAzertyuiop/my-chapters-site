@@ -3,7 +3,7 @@ export default function GebruikSection() {
     <>
       <h2>Gebruik</h2>
       <p>Alles over hoe gebruiken</p>
-      <div className="highlight">
+      <div>
         Geen kraan nodig. Geen zwaar tilwerk.
       </div>
       <div style={{ maxWidth: 400, width: '100%' }}>
