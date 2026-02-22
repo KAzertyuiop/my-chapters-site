@@ -249,9 +249,15 @@ export default function StopMotionScrubber() {
               <div className={styles.pauseBody}>{cardChapter.body}</div>
             </div>
 
-            <button type="button" className={styles.pauseCta} aria-label="Meer info">
-              +
-            </button>
+            {cardChapter?.href && (
+              <a
+                href={cardChapter.href}
+                className={styles.pauseCta}
+                aria-label="Meer info"
+              >
+                +
+              </a>
+            )}
           </div>
         </div>
       )}

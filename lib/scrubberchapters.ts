@@ -5,6 +5,7 @@ export type Chapter = {
   holdMs?: number; // pause op autoplay
   title: string;   // banner titel
   body: string;    // banner tekst
+  href: string;    // anchor link
 };
 
 export const CHAPTERS: Chapter[] = [
@@ -15,6 +16,7 @@ export const CHAPTERS: Chapter[] = [
     holdMs: 3000,
     title: "Meevoeren",
     body: "Demonteer tot een plat pakket, IKEA style. Past in elk autokoffer.",
+    href: "#transport"
   },
   {
     id: "opbergen",
@@ -22,7 +24,8 @@ export const CHAPTERS: Chapter[] = [
     index: 39,
     holdMs: 3000,
     title: "Opbergen",
-    body: "Horizontaal overwinteren met kleine voetafdruk. Blijvend verplaatsbaar.",
+    body: "Liggend overwinteren met kleine voetafdruk. Nog steeds verplaatsbaar.",
+    href: "#opslag"
   },
   {
     id: "openen",
@@ -30,7 +33,8 @@ export const CHAPTERS: Chapter[] = [
     index: 46,
     holdMs: 3000,
     title: "Openen",
-    body: "Autovrij laten drogen. Of benut je tent zonder auto. In de tuin of op reis.",
+    body: "Autovrij laten drogen. Of gebruik je tent zonder auto. In de tuin of op reis?",
+    href: "#gebruik"
   },
   {
     id: "ophijsen",
@@ -38,7 +42,8 @@ export const CHAPTERS: Chapter[] = [
     index: 53,
     holdMs: 3000,
     title: "Ophijsen",
-    body: "Voorzichtig hijsen tot ooghoogte. Als een kraan. 75 kg voelt als 25.",
+    body: "Voorzichtig hijsen als een kraan. 75 kg voelt als 25 of zelfs 15.",
+    href: "#kraan"
   },
   {
     id: "verplaatsen",
@@ -46,6 +51,7 @@ export const CHAPTERS: Chapter[] = [
     index: 87,
     holdMs: 3000,
     title: "Verplaatsen",
-    body: "Rol doorheen smalle punten. Deuren, gangen, stoep, steeg..."
+    body: "Rol voorbij smalle punten: poortjes, gangen, deuren, stoep, steeg...",
+    href: "#kar"
   },
 ];
