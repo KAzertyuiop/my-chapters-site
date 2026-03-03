@@ -3,7 +3,7 @@
 import posthog from 'posthog-js'
 import styles from './WhatsAppLink.module.css'
 
-const PHONE = '32474403450'
+const PHONE = '32456882796'
 
 type WhatsAppLinkProps = {
   activeSectionId: string | null

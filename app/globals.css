@@ -57,9 +57,7 @@ body {
 
 
 #over {
-  background: #000;
-  color: #FFF;
-  height: 200vh;
+  background: var(--bg, white);
 }
 
 #gebruik {

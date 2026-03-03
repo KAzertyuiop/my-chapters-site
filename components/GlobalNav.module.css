@@ -21,7 +21,8 @@
   display: flex;
   align-items: center;
   padding: 0 16px;
-  background: rgba(242, 242, 242, 0.9);
+  background: #000000;
+  color: #ffffff;
   backdrop-filter: blur(10px);
   /*border-bottom: 1px solid rgba(0, 0, 0, 0.08);*/
 }
@@ -43,7 +44,7 @@
 .stackLine {
   height: 2px;
   width: 34px;              /* this is the “max width” */
-  background: #000;
+  background: #ffffff;
   border-radius: 999px;
   transform-origin: right center;
   transform: scaleX(0.2);    /* default before JS kicks in */

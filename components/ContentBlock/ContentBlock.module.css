@@ -66,10 +66,26 @@
   padding: 0 0 var(--space-2) 0;
 }
 
+.button:hover {
+  border-bottom-color: transparent;
+  justify-content: center;
+}
+
+.buttonSelected,
+.button[aria-pressed='true'] {
+  border-bottom-color: transparent;
+  justify-content: center;
+}
+
 .buttonLabel {
   font-family: var(--font-family-base);
   font-size: var(--type-regular-font-size);
   font-weight: var(--type-regular-font-weight);
   line-height: var(--type-regular-line-height);
   letter-spacing: var(--type-regular-letter-spacing);
+}
+
+.buttonSelected .buttonLabel,
+.button[aria-pressed='true'] .buttonLabel {
+  font-weight: var(--font-weight-semi);
 }

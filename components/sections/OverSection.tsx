@@ -1,4 +1,5 @@
 import EmojiFeedback from "../EmojiFeedback";
+import ContentBlock from '@/components/ContentBlock'
 
 export default function OverSection() {
   return (
@@ -9,10 +10,11 @@ export default function OverSection() {
         sectionId="pricing"
         sectionLabel="Pricing section"
       />
-      <div style={{ maxWidth: 400, width: '100%' }}>
-
-        
-      </div>
+      <ContentBlock
+        title="Bestellen"
+        description="Dit is een test van de ContentBlock integratie."
+        buttons={['Meer info', 'Specificaties', 'Contact']}
+      />
     </>
   )
 }

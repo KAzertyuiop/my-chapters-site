@@ -244,7 +244,7 @@
 
 /* Toggle visibility (prevents flashes + enables smooth fade) */
 .pauseCardHidden {
-  opacity: 1;
+  opacity: 0;
   color: transparent;
   /*transform: translateY(2px);*/
   pointer-events: none;
