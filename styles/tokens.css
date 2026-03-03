@@ -1,0 +1,75 @@
+:root {
+  --bg: #ffffff;
+  --bg-alt: #e1e1e1;
+  --fg: #111111;
+  --muted: #666666;
+  --border: #e5e5e5;
+  --accent: #2563eb;
+  --color-x: #3f1d1d;
+  --color-y: #1e3a5f;
+  --color-z: #064e3b;
+  --zwart: #000000;
+  --max-width: 2000px;
+  --content-section-padding-y: 2.5rem;
+  --content-padding-x: 1rem;
+
+  /* Color variables (from Figma) */
+  --color-dark: #000000;
+  --color-light: #ffffff;
+
+  /* Typography family */
+  --font-family-base: "Inter", sans-serif;
+
+  /* Typography scale (from Figma styles) */
+  --font-size-small: 12px;
+  --font-size-regular: 14px;
+  --font-size-larger: 16px;
+  --font-size-huge: 40px;
+
+  --font-weight-regular: 400;
+  --font-weight-semi: 600;
+
+  --line-height-small: 1;
+  --line-height-regular: 1;
+  --line-height-larger: 1;
+  --line-height-huge: 40px;
+
+  --letter-spacing-small: 0;
+  --letter-spacing-regular: 0;
+  --letter-spacing-larger: 0;
+  --letter-spacing-huge: -1px;
+
+  /* Named typography tokens */
+  --type-small-font-size: var(--font-size-small);
+  --type-small-font-weight: var(--font-weight-regular);
+  --type-small-line-height: var(--line-height-small);
+  --type-small-letter-spacing: var(--letter-spacing-small);
+
+  --type-regular-font-size: var(--font-size-regular);
+  --type-regular-font-weight: var(--font-weight-regular);
+  --type-regular-line-height: var(--line-height-regular);
+  --type-regular-letter-spacing: var(--letter-spacing-regular);
+
+  --type-larger-font-size: var(--font-size-larger);
+  --type-larger-font-weight: var(--font-weight-regular);
+  --type-larger-line-height: var(--line-height-larger);
+  --type-larger-letter-spacing: var(--letter-spacing-larger);
+
+  --type-larger-semi-font-size: var(--font-size-larger);
+  --type-larger-semi-font-weight: var(--font-weight-semi);
+  --type-larger-semi-line-height: var(--line-height-larger);
+  --type-larger-semi-letter-spacing: var(--letter-spacing-larger);
+
+  --type-huge-font-size: var(--font-size-huge);
+  --type-huge-font-weight: var(--font-weight-regular);
+  --type-huge-line-height: var(--line-height-huge);
+  --type-huge-letter-spacing: var(--letter-spacing-huge);
+
+  /* Spacing scale (values used in Laptop frame) */
+  --space-0: 0;
+  --space-2: 2px;
+  --space-8: 8px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+}

@@ -1,0 +1,75 @@
+.contentBlock {
+  background: var(--color-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: var(--space-20);
+  inline-size: 100%;
+}
+
+.viewportContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  inline-size: 100%;
+  max-inline-size: min(100%, calc(var(--space-24) * 31.25));
+  padding-inline: var(--space-24);
+}
+
+.contentCombo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-16);
+  inline-size: 100%;
+}
+
+.title {
+  margin: 0;
+  inline-size: 100%;
+  text-align: center;
+  color: var(--color-dark);
+  font-family: var(--font-family-base);
+  font-size: var(--type-larger-semi-font-size);
+  font-weight: var(--type-larger-semi-font-weight);
+  line-height: var(--type-larger-semi-line-height);
+  letter-spacing: var(--type-larger-semi-letter-spacing);
+}
+
+.description {
+  margin: 0;
+  inline-size: 100%;
+  text-align: center;
+  color: var(--color-dark);
+  font-family: var(--font-family-base);
+  font-size: var(--type-regular-font-size);
+  font-weight: var(--type-regular-font-weight);
+  line-height: var(--type-regular-line-height);
+  letter-spacing: var(--type-regular-letter-spacing);
+}
+
+.actions {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-16);
+}
+
+.button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-dark);
+  color: var(--color-dark);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0 var(--space-2) 0;
+}
+
+.buttonLabel {
+  font-family: var(--font-family-base);
+  font-size: var(--type-regular-font-size);
+  font-weight: var(--type-regular-font-weight);
+  line-height: var(--type-regular-line-height);
+  letter-spacing: var(--type-regular-letter-spacing);
+}

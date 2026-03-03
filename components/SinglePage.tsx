@@ -207,7 +207,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
           const SectionComponent = section.Component
           return (
             <section key={section.id} id={section.id} className="section">
-              <div className="container">
+              <div>
                 <SectionComponent />
               </div>
             </section>

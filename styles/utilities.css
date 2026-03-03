@@ -1,0 +1,44 @@
+/* Typography utilities powered by tokens in styles/tokens.css */
+
+.u-type-small,
+.u-type-regular,
+.u-type-larger,
+.u-type-larger-semi,
+.u-type-huge {
+  font-family: var(--font-family-base);
+}
+
+.u-type-small {
+  font-size: var(--type-small-font-size);
+  font-weight: var(--type-small-font-weight);
+  line-height: var(--type-small-line-height);
+  letter-spacing: var(--type-small-letter-spacing);
+}
+
+.u-type-regular {
+  font-size: var(--type-regular-font-size);
+  font-weight: var(--type-regular-font-weight);
+  line-height: var(--type-regular-line-height);
+  letter-spacing: var(--type-regular-letter-spacing);
+}
+
+.u-type-larger {
+  font-size: var(--type-larger-font-size);
+  font-weight: var(--type-larger-font-weight);
+  line-height: var(--type-larger-line-height);
+  letter-spacing: var(--type-larger-letter-spacing);
+}
+
+.u-type-larger-semi {
+  font-size: var(--type-larger-semi-font-size);
+  font-weight: var(--type-larger-semi-font-weight);
+  line-height: var(--type-larger-semi-line-height);
+  letter-spacing: var(--type-larger-semi-letter-spacing);
+}
+
+.u-type-huge {
+  font-size: var(--type-huge-font-size);
+  font-weight: var(--type-huge-font-weight);
+  line-height: var(--type-huge-line-height);
+  letter-spacing: var(--type-huge-letter-spacing);
+}
