@@ -5,6 +5,8 @@
   align-items: center;
   padding-block: var(--space-20);
   inline-size: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .viewportContainer {
@@ -22,6 +24,61 @@
   align-items: center;
   gap: var(--space-16);
   inline-size: 100%;
+}
+
+.stickyCombo {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--space-24);
+}
+
+.textColumn,
+.visualColumn {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.stickyDescription {
+  margin: 0;
+  inline-size: 100%;
+  color: var(--color-dark);
+  font-family: var(--font-family-base);
+  font-size: var(--type-regular-font-size);
+  font-weight: var(--type-regular-font-weight);
+  line-height: var(--type-regular-line-height);
+  letter-spacing: var(--type-regular-letter-spacing);
+  white-space: pre-wrap;
+  height: 200vh;
+}
+
+.stickyStage {
+  position: sticky;
+  inset-block-start: var(--sticky-top, 60px);
+  inline-size: 100%;
+  block-size: var(--sticky-visual-height, 300px);
+  display: flex;
+  align-items: flex-start;
+  overflow: visible;
+}
+
+.stickyVisual {
+  block-size: var(--sticky-visual-height, 300px);
+  aspect-ratio: 1 / 1;
+  inline-size: var(--sticky-visual-height, 300px);
+}
+
+.stickyVisual > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.dummyVisual {
+  block-size: var(--sticky-visual-height, 300px);
+  aspect-ratio: 1 / 1;
+  inline-size: var(--sticky-visual-height, 300px);
+  background: #d9d9d9;
 }
 
 .title {
