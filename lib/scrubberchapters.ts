@@ -15,7 +15,7 @@ export const CHAPTERS: Chapter[] = [
     index: 0,
     holdMs: 3000,
     title: "Meevoeren",
-    body: "Demonteer tot een plat pakket (IKEA style). Past in elk autokoffer.",
+    body: "Demonteer tot een plat pakket. IKEA style. Past in elk autokoffer.",
     href: "#transport"
   },
   {
@@ -42,7 +42,7 @@ export const CHAPTERS: Chapter[] = [
     index: 53,
     holdMs: 3000,
     title: "Ophijsen",
-    body: "Rustig hijsen, als een kraan. 75 kg voelt 3 tot 4 keer lichter.",
+    body: "Voorzichtig hijsen, met hefboom. 75 kg voelt 3 tot 4 keer lichter.",
     href: "#kraan"
   },
   {

@@ -6,7 +6,11 @@ export default function OpslagSection() {
       <ContentBlock
         title="Bewaren"
         description="Dit is een test van de ContentBlock integratie."
-        buttons={['Meer info', 'Specificaties', 'Contact']}
+        buttons={[
+          { label: 'Meer info', href: '/meer-info' },
+          { label: 'Specificaties', href: '/specificaties' },
+          { label: 'Contact', href: '/contact' },
+        ]}
       />
     </>
   )

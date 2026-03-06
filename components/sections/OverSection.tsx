@@ -13,7 +13,6 @@ export default function OverSection() {
       <ContentBlock
         title="Bestellen"
         description="Dit is een test van de ContentBlock integratie."
-        buttons={['Meer info', 'Specificaties', 'Contact']}
       />
     </>
   )

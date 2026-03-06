@@ -11,7 +11,11 @@ export default function GebruikSection() {
       <ContentBlock
         title="Openen"
         description="Dit is een test van de ContentBlock integratie."
-        buttons={['Meer info', 'Specificaties', 'Contact']}
+        buttons={[
+          { label: 'Meer info', href: '/meer-info' },
+          { label: 'Specificaties', href: '/specificaties' },
+          { label: 'Contact', href: '/contact' },
+        ]}
       />
     </>
   )

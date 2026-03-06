@@ -8,7 +8,11 @@ export default function KarSection() {
       <ContentBlock
         title="Kar"
         description="Alles over hoe kar werkt. Dit is een test van de ContentBlock integratie."
-        buttons={['Meer info', 'Specificaties', 'Contact']}
+        buttons={[
+          { label: 'Meer info', href: '/meer-info' },
+          { label: 'Specificaties', href: '/specificaties' },
+          { label: 'Contact', href: '/contact' },
+        ]}
       />
     </>
   )
