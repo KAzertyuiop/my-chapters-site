@@ -1,11 +1,19 @@
 /* Typography utilities powered by tokens in styles/tokens.css */
 
+.u-type-mini,
 .u-type-small,
 .u-type-regular,
 .u-type-larger,
 .u-type-larger-semi,
 .u-type-huge {
   font-family: var(--font-family-base);
+}
+
+.u-type-mini {
+  font-size: var(--type-mini-font-size);
+  font-weight: var(--type-mini-font-weight);
+  line-height: var(--type-mini-line-height);
+  letter-spacing: var(--type-mini-letter-spacing);
 }
 
 .u-type-small {

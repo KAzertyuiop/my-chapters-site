@@ -25,25 +25,34 @@
   --font-family-base: "Inter", sans-serif;
 
   /* Typography scale (from Figma styles) */
+  --font-size-mini: 8px;
   --font-size-small: 12px;
   --font-size-regular: 14px;
   --font-size-larger: 16px;
   --font-size-huge: 40px;
 
+  --font-weight-extra-light: 200;
   --font-weight-regular: 400;
   --font-weight-semi: 600;
 
-  --line-height-small: 1;
-  --line-height-regular: 1;
-  --line-height-larger: 1;
-  --line-height-huge: 40px;
+  --line-height-mini: 12px;
+  --line-height-small: 18px;
+  --line-height-regular: 22px;
+  --line-height-larger: 24px;
+  --line-height-huge: 42px;
 
+  --letter-spacing-mini: 0;
   --letter-spacing-small: 0;
   --letter-spacing-regular: 0;
   --letter-spacing-larger: 0;
-  --letter-spacing-huge: -2px;
+  --letter-spacing-huge: -1px;
 
   /* Named typography tokens */
+  --type-mini-font-size: var(--font-size-mini);
+  --type-mini-font-weight: var(--font-weight-regular);
+  --type-mini-line-height: var(--line-height-mini);
+  --type-mini-letter-spacing: var(--letter-spacing-mini);
+
   --type-small-font-size: var(--font-size-small);
   --type-small-font-weight: var(--font-weight-regular);
   --type-small-line-height: var(--line-height-small);
@@ -65,7 +74,7 @@
   --type-larger-semi-letter-spacing: var(--letter-spacing-larger);
 
   --type-huge-font-size: var(--font-size-huge);
-  --type-huge-font-weight: var(--font-weight-regular);
+  --type-huge-font-weight: var(--font-weight-extra-light);
   --type-huge-line-height: var(--line-height-huge);
   --type-huge-letter-spacing: var(--letter-spacing-huge);
 
