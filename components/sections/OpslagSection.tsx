@@ -5,6 +5,7 @@ export default function OpslagSection() {
     <>
       <ContentBlock
         title="Bewaren"
+        titleClassName="u-type-larger"
         description="Dit is een test van de ContentBlock integratie."
         buttons={[
           { label: 'Meer info', href: '/meer-info' },

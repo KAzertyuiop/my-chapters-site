@@ -13,6 +13,10 @@
   --content-section-padding-y: 2.5rem;
   --content-padding-x: 1rem;
 
+  --height-nav-ribbon: var(--space-48);
+  --offset-sticky-top: calc(var(--height-nav-ribbon) + var(--space-16));
+
+
   /* Color variables (from Figma) */
   --color-dark: #000000;
   --color-light: #ffffff;
@@ -84,3 +88,11 @@
   --space-160: 160px;
   --space-192: 192px;
 }
+
+
+  /* Laptop / Desktop en groter */
+  @media (min-width: 1024px) {
+    :root {
+      --height-nav-ribbon: var(--space-64);
+    }
+  }

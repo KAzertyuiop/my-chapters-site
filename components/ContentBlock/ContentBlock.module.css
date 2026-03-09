@@ -34,10 +34,22 @@
   gap: var(--space-24);
 }
 
+.stickyComboReverse {
+  flex-direction: row-reverse;
+}
+
 .textColumn,
 .visualColumn {
   flex: 1 1 0;
   min-inline-size: 0;
+}
+
+.stickyTextContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-16);
+  inline-size: 100%;
 }
 
 .stickyDescription {
@@ -50,17 +62,20 @@
   line-height: var(--type-regular-line-height);
   letter-spacing: var(--type-regular-letter-spacing);
   white-space: pre-wrap;
-  height: 200vh;
 }
 
 .stickyStage {
   position: sticky;
-  inset-block-start: var(--sticky-top, 60px);
+  inset-block-start: var(--sticky-top, var(--offset-sticky-top));
   inline-size: 100%;
   block-size: var(--sticky-visual-height, 300px);
   display: flex;
   align-items: flex-start;
   overflow: visible;
+}
+
+.stickyStageReverse {
+  justify-content: flex-end;
 }
 
 .stickyVisual {
@@ -84,13 +99,15 @@
 .title {
   margin: 0;
   inline-size: 100%;
-  text-align: center;
   color: var(--color-dark);
-  font-family: var(--font-family-base);
-  font-size: var(--type-larger-semi-font-size);
-  font-weight: var(--type-larger-semi-font-weight);
-  line-height: var(--type-larger-semi-line-height);
-  letter-spacing: var(--type-larger-semi-letter-spacing);
+}
+
+.titleDefault {
+  text-align: center;
+}
+
+.titleSticky {
+  text-align: left;
 }
 
 .description {
@@ -103,6 +120,16 @@
   font-weight: var(--type-regular-font-weight);
   line-height: var(--type-regular-line-height);
   letter-spacing: var(--type-regular-letter-spacing);
+}
+
+.description > :first-child,
+.stickyDescription > :first-child {
+  margin-block-start: 0;
+}
+
+.description > :last-child,
+.stickyDescription > :last-child {
+  margin-block-end: 0;
 }
 
 .actions {

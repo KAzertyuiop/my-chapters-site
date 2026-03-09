@@ -3,11 +3,6 @@ import ContentBlock from '@/components/ContentBlock'
 export default function GebruikSection() {
   return (
     <>
-      <h2>Gebruik</h2>
-      <p>Alles over hoe gebruiken</p>
-      <div>
-        Geen kraan nodig. Geen zwaar tilwerk.
-      </div>
       <ContentBlock
         title="Openen"
         description="Dit is een test van de ContentBlock integratie."
@@ -18,15 +13,21 @@ export default function GebruikSection() {
         ]}
       />
       <ContentBlock
-        variant="stickyScroller"
-        description={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.`}
-        stickyVisualHeight="300px"
+        variant="stickyScrollerReverse"
+        stickyVisualHeight="50vh"
+        description={
+          <>
+            <p><strong>Important:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
+            <ul>
+              <li>First point</li>
+              <li>Second point</li>
+            </ul>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
+          </>
+        }
         stickyVisual={
           <div
             style={{

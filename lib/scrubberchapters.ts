@@ -14,7 +14,7 @@ export const CHAPTERS: Chapter[] = [
     label: "Meevoeren",
     index: 0,
     holdMs: 3000,
-    title: "Meevoeren",
+    title: "Meervoeren",
     body: "Demonteer tot een plat pakket. IKEA style. Past in elk autokoffer.",
     href: "#transport"
   },

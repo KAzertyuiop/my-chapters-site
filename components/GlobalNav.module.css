@@ -17,7 +17,7 @@
 
 .ribbon {
   pointer-events: auto;
-  height: 52px;
+  height: var(--height-nav-ribbon);
   display: flex;
   align-items: center;
   padding: 0 16px;
