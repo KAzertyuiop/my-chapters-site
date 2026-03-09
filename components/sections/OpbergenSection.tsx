@@ -1,6 +1,6 @@
 import ContentBlock from '@/components/ContentBlock'
 
-export default function OpslagSection() {
+export default function OpbergenSection() {
   return (
     <>
       <ContentBlock

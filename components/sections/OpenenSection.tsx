@@ -1,15 +1,11 @@
-import ContentBlock from '../ContentBlock/ContentBlock'
+import ContentBlock from '@/components/ContentBlock'
 
-export default function TransportSection() {
+export default function OpenenSection() {
   return (
     <>
       <ContentBlock
-        title="Meevoeren"
-        description={
-          <>
-            <p>Demonteer tot een <strong>plat pakket</strong>. IKEA style. Past in elk autokoffer.</p>
-          </>
-        }
+        title="Openen"
+        description="Dit is een test van de ContentBlock integratie."
         buttons={[
           { label: 'Meer info', href: '/meer-info' },
           { label: 'Specificaties', href: '/specificaties' },
@@ -18,6 +14,7 @@ export default function TransportSection() {
       />
       <ContentBlock
         variant="stickyScrollerReverse"
+        stickyVisualHeight="50vh"
         description={
           <>
             <p><strong>Important:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
@@ -31,7 +28,6 @@ export default function TransportSection() {
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
           </>
         }
-        stickyVisualHeight="300px"
         stickyVisual={
           <div
             style={{

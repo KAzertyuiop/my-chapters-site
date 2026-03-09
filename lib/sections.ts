@@ -1,13 +1,13 @@
 import type { ComponentType } from 'react'
 
-import GebruikSection from '@/components/sections/GebruikSection'
-import KarSection from '@/components/sections/KarSection'
+import OpenenSection from '@/components/sections/OpenenSection'
+import VerplaatsenSection from '@/components/sections/VerplaatsenSection'
 import KoopSection from '@/components/sections/KoopSection'
-import KraanSection from '@/components/sections/KraanSection'
-import OpslagSection from '@/components/sections/OpslagSection'
+import OphijsenSection from '@/components/sections/OphijsenSection'
+import OpbergenSection from '@/components/sections/OpbergenSection'
 import OverSection from '@/components/sections/OverSection'
 import OverzichtSection from '@/components/sections/OverzichtSection'
-import TransportSection from '@/components/sections/TransportSection'
+import MeevoerenSection from '@/components/sections/MeevoerenSection'
 
 
 
@@ -48,13 +48,13 @@ export const sections: Section[] = [
   },
 
   {
-    id: 'transport',
+    id: 'meevoeren',
     order: 2,
-    Component: TransportSection,
+    Component: MeevoerenSection,
 
     title: {
-      en: 'Assemble',
-      nl: 'Monteren',
+      en: 'Meevoeren',
+      nl: 'Meevoeren',
     },
     description: {
       en: 'How the Tentcarrier is assembled.',
@@ -66,13 +66,13 @@ export const sections: Section[] = [
   },
 
   {
-    id: 'kar',
+    id: 'verplaatsen',
     order: 3,
-    Component: KarSection,
+    Component: VerplaatsenSection,
 
     title: {
-      en: 'Cart',
-      nl: 'Winkelmand',
+      en: 'Verplaatsen',
+      nl: 'Verplaatsen',
     },
     description: {
       en: 'Review your Tentcarrier configuration.',
@@ -84,13 +84,13 @@ export const sections: Section[] = [
   },
 
   {
-    id: 'kraan',
+    id: 'ophijsen',
     order: 4,
-    Component: KraanSection,
+    Component: OphijsenSection,
 
     title: {
-      en: 'Crane',
-      nl: 'Heffen',
+      en: 'Ophijsen',
+      nl: 'Ophijsen',
     },
     description: {
       en: 'Crane the Tentcarrier effortlessly onto your vehicle.',
@@ -138,13 +138,13 @@ export const sections: Section[] = [
   },
 
   {
-    id: 'opslag',
+    id: 'opbergen',
     order: 5,
-    Component: OpslagSection,
+    Component: OpbergenSection,
 
     title: {
-      en: 'Store',
-      nl: 'Winkel',
+      en: 'Opbergen',
+      nl: 'Opbergen',
     },
     description: {
       en: 'Where to buy the Tentcarrier.',
@@ -156,13 +156,13 @@ export const sections: Section[] = [
   },
 
   {
-    id: 'gebruik',
+    id: 'openen',
     order: 6,
-    Component: GebruikSection,
+    Component: OpenenSection,
 
     title: {
-      en: 'Use',
-      nl: 'Gebruik',
+      en: 'Openen',
+      nl: 'Openen',
     },
     description: {
       en: 'How to use the Tentcarrier safely and efficiently.',

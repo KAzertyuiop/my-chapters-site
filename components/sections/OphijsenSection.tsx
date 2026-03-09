@@ -1,11 +1,10 @@
-import ContentBlock from '@/components/ContentBlock'
+import ContentBlock from '../ContentBlock/ContentBlock'
 
-export default function KarSection() {
+export default function OphijsenSection() {
   return (
     <>
       <ContentBlock
-        title="Kar"
-        description="Alles over hoe kar werkt. Dit is een test van de ContentBlock integratie."
+        title="Optillen"
         buttons={[
           { label: 'Meer info', href: '/meer-info' },
           { label: 'Specificaties', href: '/specificaties' },

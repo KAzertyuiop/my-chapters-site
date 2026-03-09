@@ -16,7 +16,7 @@ export const CHAPTERS: Chapter[] = [
     holdMs: 3000,
     title: "Meervoeren",
     body: "Demonteer tot een plat pakket. IKEA style. Past in elk autokoffer.",
-    href: "#transport"
+    href: "#meevoeren"
   },
   {
     id: "opbergen",
@@ -25,7 +25,7 @@ export const CHAPTERS: Chapter[] = [
     holdMs: 3000,
     title: "Opbergen",
     body: "Liggend overwinteren met kleine voetafdruk. Nog steeds verplaatsbaar.",
-    href: "#opslag"
+    href: "#opbergen"
   },
   {
     id: "openen",
@@ -34,7 +34,7 @@ export const CHAPTERS: Chapter[] = [
     holdMs: 3000,
     title: "Openen",
     body: "Autovrij laten drogen. Of gebruik je tent zonder auto. In de tuin of op reis?",
-    href: "#gebruik"
+    href: "#openen"
   },
   {
     id: "ophijsen",
@@ -43,7 +43,7 @@ export const CHAPTERS: Chapter[] = [
     holdMs: 3000,
     title: "Ophijsen",
     body: "Voorzichtig hijsen, met hefboom. 75 kg voelt 3 tot 4 keer lichter.",
-    href: "#kraan"
+    href: "#ophijsen"
   },
   {
     id: "verplaatsen",
@@ -52,6 +52,6 @@ export const CHAPTERS: Chapter[] = [
     holdMs: 3000,
     title: "Verplaatsen",
     body: "Rol voorbij smalle punten: poortjes, gangen, deuren, stoep, steeg...",
-    href: "#kar"
+    href: "#verplaatsen"
   },
 ];

@@ -62,25 +62,25 @@ body {
   background: var(--bg, white);
 }
 
-#gebruik {
+#openen {
   background: var(--bg, white);
 }
-#kar {
+#verplaatsen {
   background: var(--bg-alt, white);
 }
 #koop {
   background: var(--bg-alt, white);
 }
-#kraan {
+#ophijsen {
   background: var(--bg, white);
 }
-#opslag {
+#opbergen {
   background: var(--bg-alt, white);
 }
 
 #overzicht {
   background: var(--bg, white);
 }
-#transport {
+#meevoeren {
   background: var(--bg, white);
 }

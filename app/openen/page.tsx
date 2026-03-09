@@ -4,7 +4,7 @@ import type { Locale } from '@/lib/sections'
 
 const locale: Locale = 'en'
 
-const section = sections.find(s => s.id === 'kar')!
+const section = sections.find(s => s.id === 'openen')!
 
 export const metadata = {
   title: section.title[locale],

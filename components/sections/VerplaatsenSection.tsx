@@ -1,10 +1,11 @@
-import ContentBlock from '../ContentBlock/ContentBlock'
+import ContentBlock from '@/components/ContentBlock'
 
-export default function KraanSection() {
+export default function VerplaatsenSection() {
   return (
     <>
       <ContentBlock
-        title="Optillen"
+        title="Kar"
+        description="Alles over hoe kar werkt. Dit is een test van de ContentBlock integratie."
         buttons={[
           { label: 'Meer info', href: '/meer-info' },
           { label: 'Specificaties', href: '/specificaties' },
