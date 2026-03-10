@@ -12,8 +12,8 @@ type ContentBlockProps = {
   buttons?: ContentButton[]
   variant?: 'default' | 'stickyScroller' | 'stickyScrollerReverse'
   titleClassName?: string
-  stickyVisual?: ReactNode
-  stickyVisualHeight?: string
+  stickyContent?: ReactNode
+  stickyContentHeight?: string
   stickyTop?: string
   className?: string
 }
@@ -24,16 +24,16 @@ export default function ContentBlock({
   buttons,
   variant = 'default',
   titleClassName,
-  stickyVisual,
-  stickyVisualHeight = '300px',
+  stickyContent,
+  stickyContentHeight = '300px',
   stickyTop = 'var(--offset-sticky-top)',
   className,
 }: ContentBlockProps) {
   const buttonItems = buttons ?? []
   const hasButtons = buttonItems.length > 0
   const isStickyVariant = variant === 'stickyScroller' || variant === 'stickyScrollerReverse'
-  const stickyVisualStyles = {
-    '--sticky-visual-height': stickyVisualHeight,
+  const stickyContentStyles = {
+    '--sticky-content-height': stickyContentHeight,
     '--sticky-top': stickyTop,
   } as CSSProperties
   const titleVariantClassName = isStickyVariant ? styles.titleSticky : styles.titleDefault
@@ -77,12 +77,14 @@ export default function ContentBlock({
               </div>
             </div>
             <div className={styles.visualColumn} data-name="VisualColumn" data-node-id="I745:7347;690:1315;689:1310;745:7294">
-              <div className={[styles.stickyStage, variant === 'stickyScrollerReverse' ? styles.stickyStageReverse : null].filter(Boolean).join(' ')} data-name="StickyStage" data-node-id="I745:7347;690:1315;689:1310;745:7296" style={stickyVisualStyles}>
-                {stickyVisual ? (
-                  <div className={styles.stickyVisual}>{stickyVisual}</div>
-                ) : (
-                  <div className={styles.dummyVisual} data-name="DummyVisual" data-node-id="I745:7347;690:1315;689:1310;745:7306" />
-                )}
+              <div className={[styles.stickyStage, variant === 'stickyScrollerReverse' ? styles.stickyStageReverse : null].filter(Boolean).join(' ')} data-name="StickyStage" data-node-id="I745:7347;690:1315;689:1310;745:7296" style={stickyContentStyles}>
+                <div className={[styles.stickyClip, variant === 'stickyScrollerReverse' ? styles.stickyClipReverse : styles.stickyClipDefault].join(' ')}>
+                  {stickyContent ? (
+                    <div className={styles.stickyContent}>{stickyContent}</div>
+                  ) : (
+                    <div className={styles.dummyVisual} data-name="DummyVisual" data-node-id="I745:7347;690:1315;689:1310;745:7306" />
+                  )}
+                </div>
               </div>
             </div>
           </div>

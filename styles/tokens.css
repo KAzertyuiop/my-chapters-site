@@ -29,7 +29,7 @@
   --font-size-small: 12px;
   --font-size-regular: 14px;
   --font-size-larger: 16px;
-  --font-size-huge: 40px;
+  --font-size-huge: 34px;
 
   --font-weight-extra-light: 200;
   --font-weight-regular: 400;
@@ -53,15 +53,30 @@
   --type-mini-line-height: var(--line-height-mini);
   --type-mini-letter-spacing: var(--letter-spacing-mini);
 
+  --type-mini-semi-font-size: var(--font-size-mini);
+  --type-mini-semi-font-weight: var(--font-weight-semi);
+  --type-mini-semi-line-height: var(--line-height-mini);
+  --type-mini-semi-letter-spacing: var(--letter-spacing-mini);
+
   --type-small-font-size: var(--font-size-small);
   --type-small-font-weight: var(--font-weight-regular);
   --type-small-line-height: var(--line-height-small);
   --type-small-letter-spacing: var(--letter-spacing-small);
 
+  --type-small-semi-font-size: var(--font-size-small);
+  --type-small-semi-font-weight: var(--font-weight-semi);
+  --type-small-semi-line-height: var(--line-height-small);
+  --type-small-semi-letter-spacing: var(--letter-spacing-small);
+
   --type-regular-font-size: var(--font-size-regular);
   --type-regular-font-weight: var(--font-weight-regular);
   --type-regular-line-height: var(--line-height-regular);
   --type-regular-letter-spacing: var(--letter-spacing-regular);
+
+  --type-regular-semi-font-size: var(--font-size-regular);
+  --type-regular-semi-font-weight: var(--font-weight-semi);
+  --type-regular-semi-line-height: 20px;
+  --type-regular-semi-letter-spacing: var(--letter-spacing-regular);
 
   --type-larger-font-size: var(--font-size-larger);
   --type-larger-font-weight: var(--font-weight-regular);

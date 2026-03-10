@@ -246,7 +246,7 @@ export default function StopMotionScrubber() {
             }`}
           >
             <div className={styles.pauseText}>
-              <div className={styles.pauseBody}>{cardChapter.body}</div>
+              <div className={`${styles.pauseBody} u-type-small-semi`}>{cardChapter.body}</div>
             </div>
 
             {cardChapter?.href && (

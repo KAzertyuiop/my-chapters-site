@@ -5,7 +5,7 @@ export default function MainStart() {
   return (
     <>
       <div className={styles.opener}>
-        <h1 className={styles.promise}>
+        <h1 className={`${styles.promise} u-type-huge`}>
           <span>Hanteer je daktent</span>
           <span>met gemak</span>
         </h1>

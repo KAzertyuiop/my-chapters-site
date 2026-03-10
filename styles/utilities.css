@@ -1,8 +1,11 @@
 /* Typography utilities powered by tokens in styles/tokens.css */
 
 .u-type-mini,
+.u-type-mini-semi,
 .u-type-small,
+.u-type-small-semi,
 .u-type-regular,
+.u-type-regular-semi,
 .u-type-larger,
 .u-type-larger-semi,
 .u-type-huge {
@@ -16,6 +19,13 @@
   letter-spacing: var(--type-mini-letter-spacing);
 }
 
+.u-type-mini-semi {
+  font-size: var(--type-mini-semi-font-size);
+  font-weight: var(--type-mini-semi-font-weight);
+  line-height: var(--type-mini-semi-line-height);
+  letter-spacing: var(--type-mini-semi-letter-spacing);
+}
+
 .u-type-small {
   font-size: var(--type-small-font-size);
   font-weight: var(--type-small-font-weight);
@@ -23,11 +33,25 @@
   letter-spacing: var(--type-small-letter-spacing);
 }
 
+.u-type-small-semi {
+  font-size: var(--type-small-semi-font-size);
+  font-weight: var(--type-small-semi-font-weight);
+  line-height: var(--type-small-semi-line-height);
+  letter-spacing: var(--type-small-semi-letter-spacing);
+}
+
 .u-type-regular {
   font-size: var(--type-regular-font-size);
   font-weight: var(--type-regular-font-weight);
   line-height: var(--type-regular-line-height);
   letter-spacing: var(--type-regular-letter-spacing);
+}
+
+.u-type-regular-semi {
+  font-size: var(--type-regular-semi-font-size);
+  font-weight: var(--type-regular-semi-font-weight);
+  line-height: var(--type-regular-semi-line-height);
+  letter-spacing: var(--type-regular-semi-letter-spacing);
 }
 
 .u-type-larger {

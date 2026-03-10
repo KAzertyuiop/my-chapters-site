@@ -14,7 +14,7 @@ export default function OpenenSection() {
       />
       <ContentBlock
         variant="stickyScrollerReverse"
-        stickyVisualHeight="50vh"
+        stickyContentHeight="50vh"
         description={
           <>
             <p><strong>Important:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
@@ -28,7 +28,7 @@ export default function OpenenSection() {
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
           </>
         }
-        stickyVisual={
+        stickyContent={
           <div
             style={{
               width: '100%',

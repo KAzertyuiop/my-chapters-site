@@ -10,6 +10,7 @@ export default function OpbergenSection() {
       />
       <ContentBlock
         variant="stickyScroller"
+        stickyContentHeight="55vh"
         description={
           <>
             <p className="u-type-huge">😬</p>
@@ -39,27 +40,18 @@ export default function OpbergenSection() {
             <p>Het kan er probleemloos onder/</p>
           </>
         }
-        stickyVisual={
-          <div
+        stickyContent={
+          <img
+            src={opbergenVisualUrl}
+            alt="Illustratie van een tentdrager met een fiets eronder"
             style={{
+              display: 'block',
               width: '100%',
               height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              overflow: 'hidden',
+              objectFit: 'contain',
+              objectPosition: 'left center',
             }}
-          >
-            <img
-              src={opbergenVisualUrl}
-              alt="Illustratie van een tentdrager met een fiets eronder"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-              }}
-            />
-          </div>
+          />
         }
       />
     </>

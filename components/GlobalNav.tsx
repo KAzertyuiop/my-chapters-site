@@ -143,7 +143,7 @@ export default function GlobalNav({ activeSectionId }: { activeSectionId: string
   return (
     <div className={`${styles.wrap} ${isVisible ? styles.visible : ''}`}>
       <div className={styles.ribbon}>
-        <span className={styles.label}>Tendrager / {label}</span>
+        <span className={`${styles.label} u-type-regular-semi`}>{label}</span>
 
         <div className={styles.stack} aria-hidden="true">
           {navSections.map((s, idx) => (

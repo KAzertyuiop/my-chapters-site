@@ -9,6 +9,7 @@
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
+
     /*background-color: blue;*/
 
     --ruimte-link-illustratie: 50px;
@@ -273,9 +274,6 @@
 }
 
 .pauseBody {
-  font-size: var(--lettergrootte-annotatie);
-  line-height: 1.4;
-  font-weight: 600;
 }
 
 /* Right circular + button */
@@ -299,6 +297,8 @@
 
   cursor: pointer;
   transition: transform 0.15s ease, background 0.15s ease;
+
+  text-decoration: none;
 }
 
 .pauseCta:hover {
@@ -393,6 +393,3 @@
   right: 0;
 }
 */
-
-
-

@@ -31,8 +31,8 @@ export default function MeevoerenSection() {
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
           </>
         }
-        stickyVisualHeight="300px"
-        stickyVisual={
+        stickyContentHeight="300px"
+        stickyContent={
           <div
             style={{
               width: '100%',
