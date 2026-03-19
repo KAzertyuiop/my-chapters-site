@@ -15,24 +15,37 @@
   opacity: 1;
 }
 
-.ribbon {
+.surface {
   pointer-events: auto;
-  height: var(--height-nav-ribbon);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-block: var(--space-12);
+  background: var(--color-light);
+  color: var(--color-dark);
+  border-bottom: 1px solid var(--color-dark);
+}
+
+.contentRow {
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  background: #000000;
-  color: #ffffff;
-  backdrop-filter: blur(10px);
-  /*border-bottom: 1px solid rgba(0, 0, 0, 0.08);*/
+  justify-content: center;
+  width: 100%;
+  min-height: calc(var(--height-nav-ribbon) - (var(--space-12) * 2));
 }
 
 .label {
-  font-size: 14px;
-  font-weight: 600;
+  flex: 1 1 0;
+  min-width: 0;
+  color: var(--color-dark);
+  font-family: var(--font-family-base);
+  font-size: var(--type-regular-semi-font-size);
+  font-weight: var(--type-regular-semi-font-weight);
+  line-height: var(--type-regular-semi-line-height);
+  letter-spacing: var(--type-regular-semi-letter-spacing);
 }
 
-/* NEW: right-side stacked bars */
 .stack {
   margin-left: auto;
   display: flex;
@@ -42,11 +55,27 @@
 }
 
 .stackLine {
+  width: 34px;
   height: 2px;
-  width: 34px;              /* this is the “max width” */
-  background: #ffffff;
+  background: var(--color-dark);
   border-radius: 999px;
   transform-origin: right center;
-  transform: scaleX(0.2);    /* default before JS kicks in */
+  transform: scaleX(0.2);
   opacity: 1;
+}
+
+@media (min-width: 1024px) {
+  .surface {
+    padding-block: var(--space-16);
+  }
+
+  .contentRow {
+    min-height: calc(var(--height-nav-ribbon) - (var(--space-16) * 2));
+  }
+
+  .label {
+    font-size: var(--type-larger-semi-font-size);
+    line-height: var(--type-larger-semi-line-height);
+    letter-spacing: var(--type-larger-semi-letter-spacing);
+  }
 }

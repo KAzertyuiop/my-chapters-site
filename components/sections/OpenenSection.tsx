@@ -5,44 +5,53 @@ export default function OpenenSection() {
     <>
       <ContentBlock
         title="Openen"
-        description="Dit is een test van de ContentBlock integratie."
-        buttons={[
-          { label: 'Meer info', href: '/meer-info' },
-          { label: 'Specificaties', href: '/specificaties' },
-          { label: 'Contact', href: '/contact' },
-        ]}
       />
       <ContentBlock
-        variant="stickyScrollerReverse"
-        stickyContentHeight="50vh"
         description={
-          <>
-            <p><strong>Important:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
-            <ul>
-              <li>First point</li>
-              <li>Second point</li>
-            </ul>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec placerat elit justo non est.</p>
-          </>
-        }
-        stickyContent={
           <div
             style={{
               width: '100%',
-              height: '100%',
-              background: '#d9d9d9',
-              border: '1px dashed #888',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#555',
-              fontSize: '14px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+              gap: '24px',
+              textAlign: 'left',
             }}
           >
-            Sticky visual placeholder
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <p className="u-type-larger-semi" style={{ width: '100%', margin: 0 }}>
+                  Titel
+                </p>
+                <div
+                  style={{
+                    width: '100%',
+                    borderTop: '1px solid var(--color-dark)',
+                    paddingTop: '16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                  }}
+                >
+                  <p className="u-type-small" style={{ width: '100%', margin: 0 }}>
+                    Lorem ipsum dolor sit
+                  </p>
+                  <p className="u-type-small" style={{ width: '100%', margin: 0 }}>
+                    Lorem ipsum dolor consectetur sit
+                  </p>
+                  <p className="u-type-small" style={{ width: '100%', margin: 0 }}>
+                    Lorem dolor consectetur
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         }
       />

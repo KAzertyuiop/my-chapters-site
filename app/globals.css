@@ -30,6 +30,8 @@ body {
 
 .section {
   padding: var(--content-section-padding-y) 0;
+  min-height: 100vh;
+  scroll-margin-top: var(--offset-sticky-top);
 }
 .container {
   max-width: var(--max-width);
@@ -38,19 +40,9 @@ body {
 }
 
 
-.section + .section {
-  border-top: 1px solid var(--border);
-}
-
-
-
 .section h2 {
   font-size: 2rem;
   margin: 0 0 1rem 0;
-}
-
-.section p {
-  max-width: 42rem;
 }
 
 
@@ -66,16 +58,16 @@ body {
   background: var(--bg, white);
 }
 #verplaatsen {
-  background: var(--bg-alt, white);
+  background: var(--bg, white);
 }
 #koop {
-  background: var(--bg-alt, white);
+  background: var(--bg, white);
 }
 #ophijsen {
   background: var(--bg, white);
 }
 #opbergen {
-  background: var(--bg-alt, white);
+  background: var(--bg, white);
 }
 
 #overzicht {

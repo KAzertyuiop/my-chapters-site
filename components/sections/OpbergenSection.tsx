@@ -13,31 +13,31 @@ export default function OpbergenSection() {
         stickyContentHeight="55vh"
         description={
           <>
-            <p className="u-type-huge">😬</p>
             <p>
-              <strong>Het lastige</strong> is dat een ongebruikte daktent idealiter horizontaal blijft liggen. Zeker hardshell modellen.
-            </p>
-            <p>Dat neemt wel wat ruimte in.</p>
-            <p>Vaak op plekken waar het vloeroppervlak waardevol is:</p>
-            <ul>
-              <li>Garage</li>
-              <li>Schuur</li>
-              <li>Tuinhuis</li>
-              <li>Kelder</li>
-              <li>...</li>
-            </ul>
-            <p className="u-type-huge">💡</p>
-            <p>
-              Door in de hoogte te gaan helpt <strong>onze tentdrager</strong> de vloer net vrij te houden:
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus{' '}
+              <strong>pretium</strong> posuere. Curabitur tempor, odio nec feugiat euismod, ex
+              massa tempor nulla, nec placerat elit justo non est.
             </p>
             <ul>
-              <li>Garage</li>
-              <li>Schuur</li>
-              <li>Tuinhuis</li>
-              <li>Kelder</li>
-              <li>...</li>
+              <li>lkjlkjh</li>
+              <li>lkjlkj</li>
+              <li>mkjlkj</li>
             </ul>
-            <p>Het kan er probleemloos onder/</p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium
+              posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec
+              placerat elit justo non est.
+            </p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium
+              posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec
+              placerat elit justo non est.
+            </p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium
+              posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec
+              placerat elit justo non est.
+            </p>
           </>
         }
         stickyContent={

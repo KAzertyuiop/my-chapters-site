@@ -1,7 +1,7 @@
 export default function OverzichtSection() {
   return (
     <>
-      <h2>Overzicht</h2>
+      <h2>Samengevat</h2>
       <p>Alles over hoe overzicht</p>
     </>
   )

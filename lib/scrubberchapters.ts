@@ -33,7 +33,7 @@ export const CHAPTERS: Chapter[] = [
     index: 46,
     holdMs: 3000,
     title: "Openen",
-    body: "Autovrij laten drogen. Of gebruik je tent zonder auto. In de tuin of op reis?",
+    body: "Autovrij laten drogen. Of gebruik je tent zonder auto. In de tuin of op reis.",
     href: "#openen"
   },
   {

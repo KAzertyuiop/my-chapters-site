@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef } from 'react'
+import contentBlockStyles from '@/components/ContentBlock/ContentBlock.module.css'
 import styles from './GlobalNav.module.css'
 import { sections } from '@/lib/sections'
 
@@ -141,21 +142,25 @@ export default function GlobalNav({ activeSectionId }: { activeSectionId: string
   }, [navSections])
 
   return (
-    <div className={`${styles.wrap} ${isVisible ? styles.visible : ''}`}>
-      <div className={styles.ribbon}>
-        <span className={`${styles.label} u-type-regular-semi`}>{label}</span>
+    <div className={`${styles.wrap} ${isVisible ? styles.visible : ''}`} data-figma-global-nav>
+      <div className={styles.surface}>
+        <div className={contentBlockStyles.viewportContainer}>
+          <div className={styles.contentRow}>
+            <span className={styles.label}>{label}</span>
 
-        <div className={styles.stack} aria-hidden="true">
-          {navSections.map((s, idx) => (
-            <span
-              key={s.id}
-              className={styles.stackLine}
-              ref={(el) => {
-                barRefs.current[idx] = el
-              }}
-              title={s.title?.en ?? s.id}
-            />
-          ))}
+            <div className={styles.stack} aria-hidden="true">
+              {navSections.map((s, idx) => (
+                <span
+                  key={s.id}
+                  className={styles.stackLine}
+                  ref={(el) => {
+                    barRefs.current[idx] = el
+                  }}
+                  title={s.title?.en ?? s.id}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
