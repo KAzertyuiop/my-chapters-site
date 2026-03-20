@@ -20,6 +20,7 @@
   /* Color variables (from Figma) */
   --color-dark: #000000;
   --color-light: #ffffff;
+  --color-grey: #bbbbbb;
 
   /* Typography family */
   --font-family-base: "Inter", sans-serif;

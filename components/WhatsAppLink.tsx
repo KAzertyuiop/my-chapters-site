@@ -25,7 +25,7 @@ export default function WhatsAppLink({ activeSectionId, isVisible }: WhatsAppLin
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${styles.whatsapp} ${isVisible ? styles.visible : styles.hidden}`}
+      className={`${styles.whatsapp} u-type-regular-semi ${isVisible ? styles.visible : styles.hidden}`}
       onClick={handleClick}
       aria-label="WhatsApp bubble"
     >

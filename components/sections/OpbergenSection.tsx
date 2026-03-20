@@ -1,7 +1,5 @@
 import ContentBlock from '@/components/ContentBlock'
 
-const opbergenVisualUrl = 'https://www.figma.com/api/mcp/asset/45472fdf-d941-4b21-b585-6250d6dd7bfc'
-
 export default function OpbergenSection() {
   return (
     <>
@@ -14,42 +12,47 @@ export default function OpbergenSection() {
         description={
           <>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus{' '}
-              <strong>pretium</strong> posuere. Curabitur tempor, odio nec feugiat euismod, ex
-              massa tempor nulla, nec placerat elit justo non est.
+              <strong>Het lastige</strong> is dat een daktent best plat blijft liggen. Zeker
+              hardshell modellen.
+            </p>
+            <p>Dat neemt wel wat plaats in. Vaak op plekken waar het vloeroppervlak net waardevol is:</p>
+            <ul>
+              <li>Garage</li>
+              <li>Schuur</li>
+              <li>Tuinhuis</li>
+              <li>Kelder</li>
+              <li>...</li>
+            </ul>
+            <div
+              aria-hidden="true"
+              style={{
+                width: '100%',
+                borderTop: '1px solid var(--color-grey)',
+              }}
+            />
+            <p>
+              Door in de hoogte te gaan helpt de <strong>tentdrager</strong> de vloer vrij te
+              houden:
             </p>
             <ul>
-              <li>lkjlkjh</li>
-              <li>lkjlkj</li>
-              <li>mkjlkj</li>
+              <li>Fietsen</li>
+              <li>Karren</li>
+              <li>Buggies</li>
+              <li>Grasmaaiers</li>
+              <li>Kruiwagens</li>
+              <li>Kratten</li>
+              <li>...</li>
             </ul>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium
-              posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec
-              placerat elit justo non est.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium
-              posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec
-              placerat elit justo non est.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rhoncus pretium
-              posuere. Curabitur tempor, odio nec feugiat euismod, ex massa tempor nulla, nec
-              placerat elit justo non est.
-            </p>
+            <p>Het kan er allemaal nog onder.</p>
           </>
         }
         stickyContent={
-          <img
-            src={opbergenVisualUrl}
-            alt="Illustratie van een tentdrager met een fiets eronder"
+          <div
+            aria-hidden="true"
             style={{
-              display: 'block',
               width: '100%',
               height: '100%',
-              objectFit: 'contain',
-              objectPosition: 'left center',
+              background: 'var(--color-grey)',
             }}
           />
         }

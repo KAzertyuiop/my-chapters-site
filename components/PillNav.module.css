@@ -1,0 +1,138 @@
+.wrap {
+  position: fixed;
+  top: calc(var(--space-24) + env(safe-area-inset-top, 0px));
+  left: var(--space-24);
+  z-index: 1200;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+.shell {
+  pointer-events: auto;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 180px;
+  background: var(--color-dark);
+  color: var(--color-light);
+  border-radius: 22px;
+  overflow: clip;
+  transition: background-color 220ms ease;
+}
+
+.trigger {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-24);
+  width: 100%;
+  padding: var(--space-12) var(--space-16);
+  text-align: left;
+}
+
+.activeLabel {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.chevron {
+  flex: none;
+  display: block;
+  width: 12px;
+  height: 6px;
+  margin-left: auto;
+  transition: transform 220ms ease;
+}
+
+.open .chevron {
+  transform: rotate(180deg);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: 1fr;
+  width: 100%;
+  padding: var(--space-12) var(--space-16);
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition:
+    grid-template-rows 220ms ease,
+    padding 220ms ease,
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.panel[data-open='false'] {
+  grid-template-rows: 0fr;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  pointer-events: none;
+}
+
+.list {
+  min-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.item {
+  margin: 0;
+}
+
+.itemButton {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--color-light);
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  width: auto;
+  padding: 0;
+  text-align: left;
+}
+
+.itemButtonActive {
+  color: var(--color-light);
+}
+
+.itemIndex,
+.itemLabel {
+  font-family: var(--font-family-base);
+  font-size: var(--type-regular-font-size);
+  font-weight: var(--type-regular-font-weight);
+  line-height: var(--type-regular-line-height);
+  letter-spacing: var(--type-regular-letter-spacing);
+}
+
+.itemButtonActive .itemIndex,
+.itemButtonActive .itemLabel {
+  font-size: var(--type-regular-semi-font-size);
+  font-weight: var(--type-regular-semi-font-weight);
+  line-height: var(--type-regular-semi-line-height);
+  letter-spacing: var(--type-regular-semi-letter-spacing);
+}

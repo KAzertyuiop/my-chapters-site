@@ -5,7 +5,7 @@ import posthog from 'posthog-js'
 
 import MainStart from '@/components/MainStart'
 import WhatsAppLink from './WhatsAppLink'
-import GlobalNav from './GlobalNav'
+import PillNav from './PillNav'
 import { sections } from '@/lib/sections'
 
 const orderedSections = sections.slice().sort((a, b) => a.order - b.order)
@@ -195,7 +195,7 @@ export default function SinglePage({ scrollToId }: { scrollToId?: string }) {
 
   return (
     <>
-      <GlobalNav activeSectionId={activeSectionId} />
+      <PillNav activeSectionId={activeSectionId} />
       <WhatsAppLink activeSectionId={activeSectionId} isVisible={whatsappVisible} />
 
       <main>
