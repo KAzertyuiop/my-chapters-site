@@ -17,7 +17,7 @@ type PillNavProps = {
 type PillNavItem = {
   id: string
   label: string
-  indexLabel?: string
+  number?: number
 }
 
 const orderedSections = sections.slice().sort((a, b) => a.order - b.order)
@@ -42,7 +42,7 @@ export default function PillNav({
       ...numberedIds.map((id, index) => ({
         id,
         label: titleFor(id),
-        indexLabel: `${index + 1}.`,
+        number: index + 1,
       })),
       ...secondaryIds.map((id) => ({
         id,
@@ -134,13 +134,19 @@ export default function PillNav({
                 <li key={item.id} className={styles.item}>
                   <button
                     type="button"
-                    className={[styles.itemButton, isActive ? styles.itemButtonActive : null]
+                    className={[
+                      styles.itemButton,
+                      item.number ? styles.itemButtonNumbered : null,
+                      isActive ? styles.itemButtonActive : null,
+                    ]
                       .filter(Boolean)
                       .join(' ')}
                     onClick={() => handleSelect(item.id)}
                   >
-                    {item.indexLabel ? (
-                      <span className={styles.itemIndex}>{item.indexLabel}</span>
+                    {item.number ? (
+                      <span className={styles.numberBadge}>
+                        <span className={`${styles.numberValue} u-type-small-semi`}>{item.number}</span>
+                      </span>
                     ) : null}
                     <span className={styles.itemLabel}>{item.label}</span>
                   </button>

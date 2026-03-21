@@ -1,7 +1,7 @@
 .whatsapp {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  top: calc(var(--space-24) + env(safe-area-inset-top, 0px));
+  right: var(--space-24);
   z-index: 1000;
 
   display: inline-flex;

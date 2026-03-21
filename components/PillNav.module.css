@@ -108,28 +108,47 @@
   background: transparent;
   color: var(--color-light);
   cursor: pointer;
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-4);
-  width: auto;
+  display: block;
+  width: 100%;
   padding: 0;
   text-align: left;
+}
+
+.itemButtonNumbered {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
 }
 
 .itemButtonActive {
   color: var(--color-light);
 }
 
-.itemIndex,
+.numberBadge {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-light);
+  border-radius: 80px;
+}
+
+.numberValue {
+  color: var(--color-dark);
+}
+
 .itemLabel {
   font-family: var(--font-family-base);
   font-size: var(--type-regular-font-size);
   font-weight: var(--type-regular-font-weight);
   line-height: var(--type-regular-line-height);
   letter-spacing: var(--type-regular-letter-spacing);
+  display: block;
+  width: 100%;
 }
 
-.itemButtonActive .itemIndex,
 .itemButtonActive .itemLabel {
   font-size: var(--type-regular-semi-font-size);
   font-weight: var(--type-regular-semi-font-weight);
