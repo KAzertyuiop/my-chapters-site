@@ -33,6 +33,7 @@
   --font-size-huge: 34px;
 
   --font-weight-extra-light: 200;
+  --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-semi: 600;
 
@@ -90,7 +91,7 @@
   --type-larger-semi-letter-spacing: var(--letter-spacing-larger);
 
   --type-huge-font-size: var(--font-size-huge);
-  --type-huge-font-weight: var(--font-weight-extra-light);
+  --type-huge-font-weight: var(--font-weight-light);
   --type-huge-line-height: var(--line-height-huge);
   --type-huge-letter-spacing: var(--letter-spacing-huge);
 

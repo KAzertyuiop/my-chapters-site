@@ -7,12 +7,11 @@ import { CHAPTERS } from "@/lib/scrubberchapters";
 const FPS = 6;
 const SEEK_FPS = 18;
 const AUTOPLAY = true;
-const LOOP = true; // ping-pong keeps going
+const LOOP = true;
 const PAUSE_ON_USER = true;
 const TOTAL_FRAMES = 88;
-const START_FRAME = 24; // 0-based
-
-const CARD_SHOW_DELAY_MS = 200;
+const START_FRAME = 24;
+const PAUSE_TEXT_DELAY_MS = 200;
 
 export default function StopMotionScrubber() {
   const frames = useMemo(
@@ -32,36 +31,27 @@ export default function StopMotionScrubber() {
   }, []);
 
   const [index, setIndex] = useState(START_FRAME);
-
-  // ⬇️ autoplay gated by preload readiness
   const [ready, setReady] = useState(false);
   const [playing, setPlaying] = useState(false);
-
   const [activeLinkIndex, setActiveLinkIndex] = useState<number | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const dirRef = useRef<1 | -1>(1);
-
   const seekTimerRef = useRef<NodeJS.Timeout | null>(null);
   const seekTargetRef = useRef<number | null>(null);
-
-  const [cardVisible, setCardVisible] = useState(false);
-  const cardDelayRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Keep Image objects alive (helps some browsers stay “warm”)
+  const displayChapterTimerRef = useRef<NodeJS.Timeout | null>(null);
   const preloadedImagesRef = useRef<HTMLImageElement[]>([]);
+  const [displayChapter, setDisplayChapter] = useState<typeof CHAPTERS[number] | null>(null);
 
   useEffect(() => {
-    dirRef.current = 1; // go right on load
+    dirRef.current = 1;
   }, []);
 
-  // ✅ Preload frames once, then enable autoplay
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
       try {
-        // 1) Warm HTTP cache (more reliable for SVG than decode alone)
         await Promise.all(
           frames.map(async (src) => {
             try {
@@ -72,11 +62,10 @@ export default function StopMotionScrubber() {
 
         if (cancelled) return;
 
-        // 2) Warm image decode (best effort)
         const imgs = frames.map((src) => {
           const img = new Image();
           img.src = src;
-          // @ts-ignore
+          // @ts-expect-error Browser image decoding is supported at runtime.
           img.decoding = "async";
           return img;
         });
@@ -86,7 +75,7 @@ export default function StopMotionScrubber() {
         await Promise.all(
           imgs.map(async (img) => {
             try {
-              // @ts-ignore
+              // @ts-expect-error Browser image decode is supported at runtime.
               if (img.decode) await img.decode();
             } catch {}
           })
@@ -97,7 +86,6 @@ export default function StopMotionScrubber() {
         setReady(true);
         if (AUTOPLAY) setPlaying(true);
       } catch {
-        // even if preload fails, don't deadlock the UI
         if (!cancelled) {
           setReady(true);
           if (AUTOPLAY) setPlaying(true);
@@ -117,10 +105,8 @@ export default function StopMotionScrubber() {
   }
 
   function startSeek(target: number) {
-    // seeking should feel smooth only after preload; otherwise it may stutter
     setPlaying(false);
     setActiveLinkIndex(target);
-
     stopSeek();
 
     const clamped = Math.max(0, Math.min(frames.length - 1, target));
@@ -132,14 +118,11 @@ export default function StopMotionScrubber() {
       setIndex((prev) => {
         const t = seekTargetRef.current;
         if (t === null) return prev;
-
         if (prev === t) {
           stopSeek();
           return prev;
         }
-
-        const dir = prev < t ? 1 : -1;
-        return prev + dir;
+        return prev + (prev < t ? 1 : -1);
       });
 
       if (seekTargetRef.current !== null) {
@@ -160,27 +143,26 @@ export default function StopMotionScrubber() {
   }, [activeLinkIndex, holdsMs, index]);
 
   useEffect(() => {
-    if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
+    if (displayChapterTimerRef.current) clearTimeout(displayChapterTimerRef.current);
 
     if (!cardChapter) {
-      setCardVisible(false);
+      displayChapterTimerRef.current = setTimeout(() => {
+        setDisplayChapter(null);
+      }, 0);
       return;
     }
 
-    setCardVisible(false);
-    cardDelayRef.current = setTimeout(() => {
-      setCardVisible(true);
-    }, CARD_SHOW_DELAY_MS);
+    displayChapterTimerRef.current = setTimeout(() => {
+      setDisplayChapter(cardChapter);
+    }, PAUSE_TEXT_DELAY_MS);
 
     return () => {
-      if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
+      if (displayChapterTimerRef.current) clearTimeout(displayChapterTimerRef.current);
     };
   }, [cardChapter]);
 
-  // Autoplay logic (only if ready)
   useEffect(() => {
-    if (!ready) return;
-    if (!playing) return;
+    if (!ready || !playing) return;
 
     const baseInterval = 1000 / FPS;
     const hold = holdsMs[index] ?? 0;
@@ -210,11 +192,10 @@ export default function StopMotionScrubber() {
     };
   }, [ready, index, playing, frames.length, holdsMs]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopSeek();
-      if (cardDelayRef.current) clearTimeout(cardDelayRef.current);
+      if (displayChapterTimerRef.current) clearTimeout(displayChapterTimerRef.current);
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
@@ -226,89 +207,105 @@ export default function StopMotionScrubber() {
     setIndex(newIndex);
   }
 
-  function togglePlayPause() {
-    stopSeek();
-    setActiveLinkIndex(null);
-    setPlaying((p) => !p);
-  }
-
   return (
     <div className={styles.scrubber}>
-      <div className={styles.frameWrap}>
-        <img src={frames[index]} alt="" className={styles.frame} />
-      </div>
-
-      {cardChapter && (
-        <div className={styles.pauseCardWrapper}>
-          <div
-            className={`${styles.pauseCard} ${
-              cardVisible ? styles.pauseCardVisible : styles.pauseCardHidden
-            }`}
-          >
-            <div className={styles.pauseText}>
-              <div className={`${styles.pauseBody} u-type-small-semi`}>{cardChapter.body}</div>
-            </div>
-
-            {cardChapter?.href && (
-              <a
-                href={cardChapter.href}
-                className={styles.pauseCta}
-                aria-label="Meer info"
-              >
-                +
-              </a>
-            )}
+      <div className={`${styles.contentBlock} ${styles.contentBlockBrand}`}>
+        <div className={styles.viewportContainer}>
+          <div className={styles.contentCombo}>
+            <p className={`${styles.brand} u-type-small`}>Tentdrager.be</p>
           </div>
         </div>
-      )}
-
-      <nav className={styles.labels}>
-        {CHAPTERS.map((c) => (
-          <a
-            key={c.id}
-            href="#"
-            data-active={
-              activeLinkIndex === c.index ||
-              (playing &&
-                activeLinkIndex === null &&
-                (holdsMs[index] ?? 0) > 0 &&
-                c.index === index)
-            }
-            onClick={(e) => {
-              e.preventDefault();
-
-              // second click on active link = deselect + resume autoplay
-              if (activeLinkIndex === c.index) {
-                stopSeek();
-                setActiveLinkIndex(null);
-                setPlaying(true);
-                return;
-              }
-
-              startSeek(c.index);
-            }}
-          >
-            {c.label}
-          </a>
-        ))}
-      </nav>
-
-      <div className={styles.rangeWrap}>
-        <input
-          type="range"
-          min={0}
-          max={frames.length - 1}
-          step={1}
-          value={index}
-          onChange={(e) => handleUserSetFrame(Number(e.target.value))}
-          className={styles.range}
-          aria-label="Scrub timeline"
-        />
-        <div className={styles.rangeLine} aria-hidden="true" />
       </div>
 
-      {/* Optional: tiny debug to see readiness (remove later) */}
-      {/* <div style={{ fontSize: 12, opacity: 0.6 }}>{ready ? "ready" : "loading…"}</div> */}
+      <div className={`${styles.contentBlock} ${styles.contentBlockTitle}`}>
+        <div className={`${styles.viewportContainer} ${styles.viewportContainerTitle}`}>
+          <div className={styles.contentCombo}>
+            <div className={styles.headingWrap}>
+              {!displayChapter ? (
+                <h1 className={`${styles.introTitle} u-type-huge`}>
+                  <span>Hanteer je daktent</span>
+                  <span>met gemak</span>
+                </h1>
+              ) : (
+                <p
+                  key={`${displayChapter.id}-${displayChapter.title}`}
+                  className={styles.pauseCopy}
+                >
+                  <strong>{displayChapter.title}.</strong> {displayChapter.body}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={`${styles.contentBlock} ${styles.contentBlockVisual}`}>
+        <div className={`${styles.viewportContainer} ${styles.viewportContainerVisual}`}>
+          <div className={styles.contentCombo}>
+            <div className={styles.frameWrap}>
+              <img src={frames[index]} alt="" className={styles.frame} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={`${styles.contentBlock} ${styles.contentBlockSlider}`}>
+        <div className={styles.viewportContainer}>
+          <div className={styles.contentCombo}>
+            <div className={styles.sliderSlot}>
+              <div className={styles.rangeWrap}>
+                <input
+                  type="range"
+                  min={0}
+                  max={frames.length - 1}
+                  step={1}
+                  value={index}
+                  onChange={(e) => handleUserSetFrame(Number(e.target.value))}
+                  className={styles.range}
+                  aria-label="Scrub timeline"
+                />
+                <div className={styles.rangeLine} aria-hidden="true" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={`${styles.contentBlock} ${styles.contentBlockButtons}`}>
+        <div className={styles.viewportContainer}>
+          <div className={styles.contentCombo}>
+            <nav className={styles.labels}>
+              {CHAPTERS.map((c) => (
+                <a
+                  key={c.id}
+                  href="#"
+                  data-active={
+                    activeLinkIndex === c.index ||
+                    (playing &&
+                      activeLinkIndex === null &&
+                      (holdsMs[index] ?? 0) > 0 &&
+                      c.index === index)
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    if (activeLinkIndex === c.index) {
+                      stopSeek();
+                      setActiveLinkIndex(null);
+                      setPlaying(true);
+                      return;
+                    }
+
+                    startSeek(c.index);
+                  }}
+                >
+                  {c.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
