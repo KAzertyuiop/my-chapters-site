@@ -65,7 +65,6 @@ export default function StopMotionScrubber() {
         const imgs = frames.map((src) => {
           const img = new Image();
           img.src = src;
-          // @ts-expect-error Browser image decoding is supported at runtime.
           img.decoding = "async";
           return img;
         });
@@ -75,7 +74,6 @@ export default function StopMotionScrubber() {
         await Promise.all(
           imgs.map(async (img) => {
             try {
-              // @ts-expect-error Browser image decode is supported at runtime.
               if (img.decode) await img.decode();
             } catch {}
           })
