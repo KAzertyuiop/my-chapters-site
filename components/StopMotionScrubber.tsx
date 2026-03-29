@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { gsap } from "gsap";
 import styles from "./StopMotionScrubber.module.css";
 import { CHAPTERS } from "@/lib/scrubberchapters";
 
@@ -12,6 +13,30 @@ const PAUSE_ON_USER = true;
 const TOTAL_FRAMES = 88;
 const START_FRAME = 24;
 const PAUSE_TEXT_DELAY_MS = 200;
+const PLAY_RING_RADIUS = 14.5;
+const PLAY_RING_CENTER = 18;
+const PLAY_RING_MIN_PROGRESS = 0.02;
+const PLAY_RING_MAX_PROGRESS = 0.999;
+
+function polarToCartesian(cx: number, cy: number, radius: number, angleDeg: number) {
+  const angleRad = (angleDeg * Math.PI) / 180;
+  return {
+    x: cx + radius * Math.cos(angleRad),
+    y: cy + radius * Math.sin(angleRad),
+  };
+}
+
+function buildClockwiseArc(progress: number) {
+  const clamped = Math.min(Math.max(progress, PLAY_RING_MIN_PROGRESS), PLAY_RING_MAX_PROGRESS);
+  const startAngle = -90;
+  const sweepAngle = 360 * clamped;
+  const endAngle = startAngle + sweepAngle;
+  const start = polarToCartesian(PLAY_RING_CENTER, PLAY_RING_CENTER, PLAY_RING_RADIUS, startAngle);
+  const end = polarToCartesian(PLAY_RING_CENTER, PLAY_RING_CENTER, PLAY_RING_RADIUS, endAngle);
+  const largeArcFlag = sweepAngle > 180 ? 1 : 0;
+
+  return `M ${start.x} ${start.y} A ${PLAY_RING_RADIUS} ${PLAY_RING_RADIUS} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
+}
 
 export default function StopMotionScrubber() {
   const frames = useMemo(
@@ -40,8 +65,11 @@ export default function StopMotionScrubber() {
   const seekTimerRef = useRef<NodeJS.Timeout | null>(null);
   const seekTargetRef = useRef<number | null>(null);
   const displayChapterTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const playRingTweenRef = useRef<gsap.core.Tween | null>(null);
   const preloadedImagesRef = useRef<HTMLImageElement[]>([]);
   const [displayChapter, setDisplayChapter] = useState<typeof CHAPTERS[number] | null>(null);
+  const [skippedHoldIndex, setSkippedHoldIndex] = useState<number | null>(null);
+  const [ringProgress, setRingProgress] = useState(PLAY_RING_MAX_PROGRESS);
 
   useEffect(() => {
     dirRef.current = 1;
@@ -102,9 +130,17 @@ export default function StopMotionScrubber() {
     seekTimerRef.current = null;
   }
 
+  const stopPlayRingTween = useCallback(() => {
+    if (playRingTweenRef.current) {
+      playRingTweenRef.current.kill();
+      playRingTweenRef.current = null;
+    }
+  }, []);
+
   function startSeek(target: number) {
     setPlaying(false);
     setActiveLinkIndex(target);
+    setSkippedHoldIndex(null);
     stopSeek();
 
     const clamped = Math.max(0, Math.min(frames.length - 1, target));
@@ -140,6 +176,11 @@ export default function StopMotionScrubber() {
     return null;
   }, [activeLinkIndex, holdsMs, index]);
 
+  const autoplayHoldMs =
+    playing && activeLinkIndex === null && skippedHoldIndex !== index
+      ? holdsMs[index] ?? 0
+      : 0;
+
   useEffect(() => {
     if (displayChapterTimerRef.current) clearTimeout(displayChapterTimerRef.current);
 
@@ -160,13 +201,41 @@ export default function StopMotionScrubber() {
   }, [cardChapter]);
 
   useEffect(() => {
+    stopPlayRingTween();
+
+    if (!autoplayHoldMs) {
+      return;
+    }
+
+    const ringState = { progress: PLAY_RING_MAX_PROGRESS };
+    playRingTweenRef.current = gsap.to(ringState, {
+      duration: autoplayHoldMs / 1000,
+      ease: "none",
+      progress: PLAY_RING_MIN_PROGRESS,
+      onUpdate: () => {
+        setRingProgress(ringState.progress);
+      },
+    });
+
+    return () => {
+      if (playRingTweenRef.current) {
+        playRingTweenRef.current.kill();
+        playRingTweenRef.current = null;
+      }
+    };
+  }, [autoplayHoldMs, index, stopPlayRingTween]);
+
+  useEffect(() => {
     if (!ready || !playing) return;
 
     const baseInterval = 1000 / FPS;
-    const hold = holdsMs[index] ?? 0;
+    const hold = skippedHoldIndex === index ? 0 : holdsMs[index] ?? 0;
     const interval = baseInterval + hold;
 
     timerRef.current = setTimeout(() => {
+      if (skippedHoldIndex === index) {
+        setSkippedHoldIndex(null);
+      }
       setIndex((prev) => {
         const last = frames.length - 1;
         let next = prev + dirRef.current;
@@ -188,22 +257,39 @@ export default function StopMotionScrubber() {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [ready, index, playing, frames.length, holdsMs]);
+  }, [ready, index, playing, frames.length, holdsMs, skippedHoldIndex]);
 
   useEffect(() => {
     return () => {
       stopSeek();
+      stopPlayRingTween();
       if (displayChapterTimerRef.current) clearTimeout(displayChapterTimerRef.current);
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, []);
+  }, [stopPlayRingTween]);
 
   function handleUserSetFrame(newIndex: number) {
     stopSeek();
     setActiveLinkIndex(null);
+    setSkippedHoldIndex(null);
     if (PAUSE_ON_USER) setPlaying(false);
     setIndex(newIndex);
   }
+
+  function handlePlayClick() {
+    stopSeek();
+    if (holdsMs[index]) {
+      setSkippedHoldIndex(index);
+    }
+    setActiveLinkIndex(null);
+    setPlaying(true);
+  }
+
+  const playOverlayStyle = {
+    "--play-offset-y": `${displayChapter?.playOffsetY ?? 0}px`,
+  } as CSSProperties;
+  const effectiveRingProgress = autoplayHoldMs ? ringProgress : PLAY_RING_MAX_PROGRESS;
+  const playRingPath = buildClockwiseArc(effectiveRingProgress);
 
   return (
     <div className={styles.scrubber}>
@@ -242,6 +328,29 @@ export default function StopMotionScrubber() {
           <div className={styles.contentCombo}>
             <div className={styles.frameWrap}>
               <img src={frames[index]} alt="" className={styles.frame} />
+              {displayChapter ? (
+                <button
+                  type="button"
+                  className={styles.playOverlay}
+                  style={playOverlayStyle}
+                  onClick={handlePlayClick}
+                  aria-label="Speel verder"
+                >
+                  <svg
+                    className={styles.playRing}
+                    viewBox="0 0 36 36"
+                    aria-hidden="true"
+                  >
+                    <path
+                      className={styles.playRingArc}
+                      d={playRingPath}
+                    />
+                  </svg>
+                  <span className={styles.playDisc} aria-hidden="true">
+                    <span className={styles.playIcon} aria-hidden="true" />
+                  </span>
+                </button>
+              ) : null}
             </div>
           </div>
         </div>
