@@ -2,6 +2,7 @@
 
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
+import ContentBlock from "./ContentBlock";
 import styles from "./StopMotionScrubber.module.css";
 import { CHAPTERS } from "@/lib/scrubberchapters";
 
@@ -293,126 +294,99 @@ export default function StopMotionScrubber() {
 
   return (
     <div className={styles.scrubber}>
-      <div className={`${styles.contentBlock} ${styles.contentBlockBrand}`}>
-        <div className={styles.viewportContainer}>
-          <div className={styles.contentCombo}>
-            <p className={`${styles.brand} u-type-small`}>Tentdrager.be</p>
-          </div>
-        </div>
-      </div>
+      {!displayChapter ? (
+        <ContentBlock
+          title="Hanteer je daktent met gemak"
+          comboVariant="bigTitle"
+          className={`${styles.contentBlock} ${styles.contentBlockTitle}`}
+          viewportClassName={styles.viewportContainerTitle}
+          titleClassName={styles.introTitle}
+        />
+      ) : (
+        <ContentBlock
+          description={
+            <>
+              <strong>{displayChapter.title}.</strong> {displayChapter.body}
+            </>
+          }
+          className={`${styles.contentBlock} ${styles.contentBlockTitle}`}
+          viewportClassName={styles.viewportContainerTitle}
+          descriptionClassName={styles.pauseCopy}
+        />
+      )}
 
-      <div className={`${styles.contentBlock} ${styles.contentBlockTitle}`}>
-        <div className={`${styles.viewportContainer} ${styles.viewportContainerTitle}`}>
-          <div className={styles.contentCombo}>
-            <div className={styles.headingWrap}>
-              {!displayChapter ? (
-                <h1 className={`${styles.introTitle} u-type-huge`}>
-                  <span>Hanteer je daktent</span>
-                  <span>met gemak</span>
-                </h1>
-              ) : (
-                <p
-                  key={`${displayChapter.id}-${displayChapter.title}`}
-                  className={styles.pauseCopy}
-                >
-                  <strong>{displayChapter.title}.</strong> {displayChapter.body}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={`${styles.contentBlock} ${styles.contentBlockVisual}`}>
-        <div className={`${styles.viewportContainer} ${styles.viewportContainerVisual}`}>
-          <div className={styles.contentCombo}>
-            <div className={styles.frameWrap}>
-              <img src={frames[index]} alt="" className={styles.frame} />
-              {displayChapter ? (
-                <button
-                  type="button"
-                  className={styles.playOverlay}
-                  style={playOverlayStyle}
-                  onClick={handlePlayClick}
-                  aria-label="Speel verder"
-                >
-                  <svg
-                    className={styles.playRing}
-                    viewBox="0 0 36 36"
-                    aria-hidden="true"
-                  >
-                    <path
-                      className={styles.playRingArc}
-                      d={playRingPath}
-                    />
-                  </svg>
-                  <span className={styles.playDisc} aria-hidden="true">
-                    <span className={styles.playIcon} aria-hidden="true" />
-                  </span>
-                </button>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={`${styles.contentBlock} ${styles.contentBlockSlider}`}>
-        <div className={styles.viewportContainer}>
-          <div className={styles.contentCombo}>
-            <div className={styles.sliderSlot}>
-              <div className={styles.rangeWrap}>
-                <input
-                  type="range"
-                  min={0}
-                  max={frames.length - 1}
-                  step={1}
-                  value={index}
-                  onChange={(e) => handleUserSetFrame(Number(e.target.value))}
-                  className={styles.range}
-                  aria-label="Scrub timeline"
+      <ContentBlock viewportClassName={styles.viewportContainerVisual}>
+        <div className={styles.frameWrap}>
+          <img src={frames[index]} alt="" className={styles.frame} />
+          {displayChapter ? (
+            <button
+              type="button"
+              className={styles.playOverlay}
+              style={playOverlayStyle}
+              onClick={handlePlayClick}
+              aria-label="Speel verder"
+            >
+              <svg
+                className={styles.playRing}
+                viewBox="0 0 36 36"
+                aria-hidden="true"
+              >
+                <path
+                  className={styles.playRingArc}
+                  d={playRingPath}
                 />
-                <div className={styles.rangeLine} aria-hidden="true" />
-              </div>
-            </div>
+              </svg>
+              <span className={styles.playDisc} aria-hidden="true">
+                <span className={styles.playIcon} aria-hidden="true" />
+              </span>
+            </button>
+          ) : null}
+        </div>
+      </ContentBlock>
+
+      <ContentBlock className={styles.contentBlockSlider}>
+        <div className={styles.sliderSlot}>
+          <div className={styles.rangeWrap}>
+            <input
+              type="range"
+              min={0}
+              max={frames.length - 1}
+              step={1}
+              value={index}
+              onChange={(e) => handleUserSetFrame(Number(e.target.value))}
+              className={styles.range}
+              aria-label="Scrub timeline"
+            />
+            <div className={styles.rangeLine} aria-hidden="true" />
           </div>
         </div>
-      </div>
+      </ContentBlock>
 
-      <div className={`${styles.contentBlock} ${styles.contentBlockButtons}`}>
-        <div className={styles.viewportContainer}>
-          <div className={styles.contentCombo}>
-            <nav className={styles.labels}>
-              {CHAPTERS.map((c) => (
-                <a
-                  key={c.id}
-                  href="#"
-                  data-active={
-                    activeLinkIndex === c.index ||
-                    (playing &&
-                      activeLinkIndex === null &&
-                      (holdsMs[index] ?? 0) > 0 &&
-                      c.index === index)
-                  }
-                  onClick={(e) => {
-                    e.preventDefault();
+      <ContentBlock
+        comboVariant="buttonStack"
+        buttons={CHAPTERS.map((c) => ({
+          label: c.label,
+          href: "#",
+          active:
+            activeLinkIndex === c.index ||
+            (playing &&
+              activeLinkIndex === null &&
+              (holdsMs[index] ?? 0) > 0 &&
+              c.index === index),
+          onClick: (e) => {
+            e.preventDefault();
 
-                    if (activeLinkIndex === c.index) {
-                      stopSeek();
-                      setActiveLinkIndex(null);
-                      setPlaying(true);
-                      return;
-                    }
+            if (activeLinkIndex === c.index) {
+              stopSeek();
+              setActiveLinkIndex(null);
+              setPlaying(true);
+              return;
+            }
 
-                    startSeek(c.index);
-                  }}
-                >
-                  {c.label}
-                </a>
-              ))}
-            </nav>
-          </div>
-        </div>
-      </div>
+            startSeek(c.index);
+          },
+        }))}
+      />
     </div>
   );
 }

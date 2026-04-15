@@ -5,6 +5,7 @@ export default function MeevoerenSection() {
     <>
       <ContentBlock
         title="Meevoeren"
+        comboVariant="bigTitle"
         description={
           <>
             <p>
@@ -21,7 +22,7 @@ export default function MeevoerenSection() {
         ]}
       />
       <ContentBlock
-        variant="stickyScrollerReverse"
+        blockVariant="stickyScrollerReverse"
         description={
           <>
             <p>

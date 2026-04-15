@@ -5,6 +5,7 @@ export default function OpenenSection() {
     <>
       <ContentBlock
         title="Openen"
+        comboVariant="bigTitle"
       />
       <ContentBlock
         description={

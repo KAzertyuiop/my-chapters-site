@@ -5,9 +5,10 @@ export default function KoopSection() {
     <>
       <ContentBlock
         title="Bestellen"
+        comboVariant="bigTitle"
       />
       <ContentBlock
-        variant="stickyScroller"
+        blockVariant="stickyScroller"
         stickyContentHeight="55vh"
         description={
           <>

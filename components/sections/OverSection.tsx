@@ -5,6 +5,7 @@ export default function OverSection() {
     <>
       <ContentBlock
         title="Wie maakt dit"
+        comboVariant="bigTitle"
       />
       <ContentBlock
         description={

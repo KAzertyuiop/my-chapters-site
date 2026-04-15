@@ -4,14 +4,20 @@ import styles from './ContentBlock.module.css'
 type ContentButton = {
   label: string
   href: string
+  active?: boolean
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void
 }
 
 type ContentBlockProps = {
   title?: string
   description?: ReactNode
   buttons?: ContentButton[]
-  variant?: 'default' | 'stickyScroller' | 'stickyScrollerReverse'
+  children?: ReactNode
+  blockVariant?: 'default' | 'stickyScroller' | 'stickyScrollerReverse'
+  comboVariant?: 'default' | 'eyebrow' | 'bigTitle' | 'buttonStack'
   titleClassName?: string
+  descriptionClassName?: string
+  viewportClassName?: string
   stickyContent?: ReactNode
   stickyContentHeight?: string
   stickyTop?: string
@@ -22,8 +28,12 @@ export default function ContentBlock({
   title,
   description,
   buttons,
-  variant = 'default',
+  children,
+  blockVariant = 'default',
+  comboVariant = 'default',
   titleClassName,
+  descriptionClassName,
+  viewportClassName,
   stickyContent,
   stickyContentHeight = '300px',
   stickyTop = 'var(--offset-sticky-top)',
@@ -31,27 +41,67 @@ export default function ContentBlock({
 }: ContentBlockProps) {
   const buttonItems = buttons ?? []
   const hasButtons = buttonItems.length > 0
-  const isStickyVariant = variant === 'stickyScroller' || variant === 'stickyScrollerReverse'
+  const isStickyVariant =
+    blockVariant === 'stickyScroller' || blockVariant === 'stickyScrollerReverse'
   const stickyContentStyles = {
     '--sticky-content-height': stickyContentHeight,
     '--sticky-top': stickyTop,
   } as CSSProperties
+  const isEyebrowVariant = comboVariant === 'eyebrow'
+  const isBigTitleVariant = comboVariant === 'bigTitle'
+  const isButtonStackVariant = comboVariant === 'buttonStack'
   const titleVariantClassName = isStickyVariant ? styles.titleSticky : styles.titleDefault
-  const titleTypeClassName = isStickyVariant ? 'u-type-larger-semi' : 'u-type-huge'
+  const titleTypeClassName = isStickyVariant
+    ? 'u-type-larger-semi'
+    : isEyebrowVariant
+      ? 'u-type-small'
+      : isBigTitleVariant
+        ? 'u-type-huge'
+      : 'u-type-huge'
   const titleNode = title ? (
-    <p className={[styles.title, titleVariantClassName, titleTypeClassName, titleClassName].filter(Boolean).join(' ')} data-node-id="I690:1315;689:1310;689:1304">
+    <p
+      className={[
+        styles.title,
+        titleVariantClassName,
+        isEyebrowVariant ? styles.titleEyebrow : null,
+        isBigTitleVariant ? styles.titleBigTitle : null,
+        titleTypeClassName,
+        titleClassName,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      data-node-id="I690:1315;689:1310;689:1304"
+    >
       {title}
     </p>
   ) : null
   const descriptionNode = description ? (
-    <div className={styles.description} data-node-id="I690:1315;689:1310;689:1305">
+    <div
+      className={[styles.description, descriptionClassName].filter(Boolean).join(' ')}
+      data-node-id="I690:1315;689:1310;689:1305"
+    >
       {description}
     </div>
   ) : null
   const actionsNode = hasButtons ? (
-    <div className={styles.actions} data-node-id="I690:1315;689:1310;697:4362">
-      {buttonItems.map(({ label, href }, index) => (
-        <a key={`${label}-${href}-${index}`} href={href} className={styles.button} data-node-id="658:1099">
+    <div
+      className={[styles.actions, isButtonStackVariant ? styles.actionsButtonStack : null]
+        .filter(Boolean)
+        .join(' ')}
+      data-node-id="I690:1315;689:1310;697:4362"
+    >
+      {buttonItems.map(({ label, href, active, onClick }, index) => (
+        <a
+          key={`${label}-${href}-${index}`}
+          href={href}
+          onClick={onClick}
+          className={[styles.button, isButtonStackVariant ? styles.buttonStackItem : null]
+            .filter(Boolean)
+            .join(' ')}
+          data-node-id="658:1099"
+          data-active={active ? 'true' : undefined}
+          aria-pressed={active ? 'true' : undefined}
+        >
           <span className={styles.buttonLabel} data-node-id="658:1098">
             {label}
           </span>
@@ -59,12 +109,29 @@ export default function ContentBlock({
       ))}
     </div>
   ) : null
+  const comboContent = children ?? (
+    <>
+      {titleNode}
+      {descriptionNode}
+      {actionsNode}
+    </>
+  )
 
   return (
-    <div className={[styles.contentBlock, className].filter(Boolean).join(' ')} data-name="ContentBlock" data-node-id="691:1323" data-variant={variant}>
-      <div className={styles.viewportContainer} data-name="ViewportContainer" data-node-id="690:1315">
+    <div
+      className={[styles.contentBlock, className].filter(Boolean).join(' ')}
+      data-name="ContentBlock"
+      data-node-id="691:1323"
+      data-block-variant={blockVariant}
+      data-combo-variant={comboVariant}
+    >
+      <div
+        className={[styles.viewportContainer, viewportClassName].filter(Boolean).join(' ')}
+        data-name="ViewportContainer"
+        data-node-id="690:1315"
+      >
         {isStickyVariant ? (
-          <div className={[styles.contentCombo, styles.stickyCombo, variant === 'stickyScrollerReverse' ? styles.stickyComboReverse : null].filter(Boolean).join(' ')} data-name="ContentCombo" data-node-id="I745:7347;690:1315;689:1310">
+          <div className={[styles.contentCombo, styles.stickyCombo, blockVariant === 'stickyScrollerReverse' ? styles.stickyComboReverse : null].filter(Boolean).join(' ')} data-name="ContentCombo" data-node-id="I745:7347;690:1315;689:1310">
             <div className={styles.textColumn} data-name="TextColumn" data-node-id="I745:7347;690:1315;689:1310;745:7288">
               <div className={styles.stickyTextContent}>
                 {titleNode}
@@ -77,8 +144,8 @@ export default function ContentBlock({
               </div>
             </div>
             <div className={styles.visualColumn} data-name="VisualColumn" data-node-id="I745:7347;690:1315;689:1310;745:7294">
-              <div className={[styles.stickyStage, variant === 'stickyScrollerReverse' ? styles.stickyStageReverse : null].filter(Boolean).join(' ')} data-name="StickyStage" data-node-id="I745:7347;690:1315;689:1310;745:7296" style={stickyContentStyles}>
-                <div className={[styles.stickyClip, variant === 'stickyScrollerReverse' ? styles.stickyClipReverse : styles.stickyClipDefault].join(' ')}>
+              <div className={[styles.stickyStage, blockVariant === 'stickyScrollerReverse' ? styles.stickyStageReverse : null].filter(Boolean).join(' ')} data-name="StickyStage" data-node-id="I745:7347;690:1315;689:1310;745:7296" style={stickyContentStyles}>
+                <div className={[styles.stickyClip, blockVariant === 'stickyScrollerReverse' ? styles.stickyClipReverse : styles.stickyClipDefault].join(' ')}>
                   {stickyContent ? (
                     <div className={styles.stickyContent}>{stickyContent}</div>
                   ) : (
@@ -90,9 +157,7 @@ export default function ContentBlock({
           </div>
         ) : (
           <div className={styles.contentCombo} data-name="ContentCombo" data-node-id="I690:1315;689:1310">
-            {titleNode}
-            {descriptionNode}
-            {actionsNode}
+            {comboContent}
           </div>
         )}
       </div>

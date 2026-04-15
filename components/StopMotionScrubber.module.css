@@ -21,10 +21,6 @@
   padding-bottom: var(--space-24);
 }
 
-.contentBlockBrand {
-  justify-content: center;
-}
-
 .contentBlockTitle {
   height: 100px;
   padding-top: var(--space-4);
@@ -32,23 +28,9 @@
   justify-content: center;
 }
 
-.contentBlockVisual {}
-
 .contentBlockSlider {
   padding-top: 0;
   padding-bottom: 0;
-}
-
-.contentBlockButtons {}
-
-.viewportContainer {
-  width: 100%;
-  max-width: min(100%, 1000px);
-  padding-left: var(--space-24);
-  padding-right: var(--space-24);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .viewportContainerVisual {
@@ -61,52 +43,17 @@
   padding-right: var(--space-48);
 }
 
-.contentCombo {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.brand {
-  width: 100%;
-  margin: 0;
-  text-align: center;
-}
-
-.headingWrap {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
 .introTitle {
   width: 100%;
-  margin: 0;
   text-align: center;
-}
-
-.introTitle span {
-  display: block;
-}
-
-.introTitle span:last-child {
-  margin-top: -0.02em;
 }
 
 .pauseCopy {
   width: 100%;
   max-width: 342px;
-  margin: 0;
   text-align: center;
-  color: var(--color-dark);
-  font-family: var(--font-family-base);
   font-size: 16px;
-  font-weight: var(--type-regular-font-weight);
   line-height: 24px;
-  letter-spacing: var(--type-regular-letter-spacing);
 }
 
 .pauseCopy strong {
@@ -167,7 +114,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--color-lightgrey);
+  background: var(--color-light);
 }
 
 .playIcon {
@@ -266,35 +213,4 @@
   transform: translateY(-50%);
   background: var(--zwart);
   pointer-events: none;
-}
-
-.labels {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-12);
-  user-select: none;
-}
-
-.labels a {
-  color: var(--color-dark);
-  text-decoration: none;
-  white-space: nowrap;
-  border-bottom: 1px solid currentColor;
-  padding: 0 0 var(--space-2) 0;
-  font-family: var(--font-family-base);
-  font-size: var(--type-regular-font-size);
-  font-weight: var(--type-regular-font-weight);
-  line-height: var(--type-regular-line-height);
-  letter-spacing: var(--type-regular-letter-spacing);
-}
-
-.labels a:hover {
-  border-bottom-color: transparent;
-}
-
-.labels a[data-active="true"] {
-  font-weight: var(--font-weight-semi);
-  border-bottom-color: transparent;
 }

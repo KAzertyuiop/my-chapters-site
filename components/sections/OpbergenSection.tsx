@@ -5,9 +5,10 @@ export default function OpbergenSection() {
     <>
       <ContentBlock
         title="Opbergen"
+        comboVariant="bigTitle"
       />
       <ContentBlock
-        variant="stickyScroller"
+        blockVariant="stickyScroller"
         stickyContentHeight="55vh"
         description={
           <>

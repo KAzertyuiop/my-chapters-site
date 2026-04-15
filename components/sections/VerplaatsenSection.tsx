@@ -5,6 +5,7 @@ export default function VerplaatsenSection() {
     <>
       <ContentBlock
         title="Verplaatsen"
+        comboVariant="bigTitle"
       />
       <ContentBlock
         description={

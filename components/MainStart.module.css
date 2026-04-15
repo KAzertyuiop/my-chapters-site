@@ -1,9 +1,0 @@
-.opener {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.scrubberSizing {
-  width: min(100%, 390px);
-}

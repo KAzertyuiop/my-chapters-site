@@ -128,6 +128,14 @@
   text-align: left;
 }
 
+.titleEyebrow {
+  inline-size: auto;
+}
+
+.titleBigTitle {
+  text-wrap: balance;
+}
+
 .description {
   margin: 0;
   inline-size: 100%;
@@ -156,6 +164,12 @@
   gap: var(--space-16);
 }
 
+.actionsButtonStack {
+  flex-direction: column;
+  align-items: center;
+  inline-size: 100%;
+}
+
 .button {
   appearance: none;
   background: transparent;
@@ -169,13 +183,18 @@
   text-decoration: none;
 }
 
+.buttonStackItem {
+  white-space: nowrap;
+}
+
 .button:hover {
   border-bottom-color: transparent;
   justify-content: center;
 }
 
 .buttonSelected,
-.button[aria-pressed='true'] {
+.button[aria-pressed='true'],
+.button[data-active='true'] {
   border-bottom-color: transparent;
   justify-content: center;
 }
@@ -189,6 +208,14 @@
 }
 
 .buttonSelected .buttonLabel,
-.button[aria-pressed='true'] .buttonLabel {
+.button[aria-pressed='true'] .buttonLabel,
+.button[data-active='true'] .buttonLabel {
   font-weight: var(--font-weight-semi);
+}
+
+@media (min-width: 1024px) {
+  .actionsButtonStack {
+    flex-direction: row;
+    justify-content: center;
+  }
 }
